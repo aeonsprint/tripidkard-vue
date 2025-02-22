@@ -1,5 +1,5 @@
 // Import components
-import AdminDashboard from './Pages/Dashboard/Admin/OverviewList.vue';
+import AdminDashboard from "./Pages/Dashboard/Admin/OverviewList.vue";
 
 // import AdminMerchant from './Pages/Admin/Merchant/MerchantList.vue';
 // import AdminMerchantPending from './Pages/Admin/Merchant/MerchantPending.vue';
@@ -12,7 +12,6 @@ import AdminDashboard from './Pages/Dashboard/Admin/OverviewList.vue';
 // import AdminInfluencerArchive from './Pages/Admin/Influencer/InfluencerArchive.vue';
 // import AdminScanner from './Pages/Admin/Scanner/Qr-Code.vue';
 // import AdminOrderStarForm from './Pages/Admin/Order/OrderPointRegister.vue';
-
 
 // import AdminTripidkard from './Pages/Admin/Tripidkard/TripidkardList.vue';
 // import AdminTripidkardForm from './Pages/Admin/Tripidkard/TripidkardRegister.vue';
@@ -28,15 +27,16 @@ import AdminDashboard from './Pages/Dashboard/Admin/OverviewList.vue';
 // import AdminProfile from './Pages/Admin/Profile/ProfileList.vue';
 
 // Import Merchant
-import MerchantDashboard from './Pages/Dashboard/Merchant/OverviewList.vue';
-import MerchantProfile from './Pages/Dashboard/Merchant/ProfileList.vue';
-import MerchantDiscount from './Pages/Dashboard/Merchant/DiscountList.vue';
-import MerchantAnalytics from './Pages/Dashboard/Merchant/Analytics.vue';
-import MerchantRaffle from './Pages/Dashboard/Merchant/RaffleList.vue';
-import MerchantDeals from './Pages/Dashboard/Merchant/FlashDeals.vue';
-import MerchantLogs from './Pages/Dashboard/Merchant/ActivityLog.vue';
-import MerchantBilling from './Pages/Dashboard/Merchant/Billing.vue';
-import MerchantPlan from './Pages/Dashboard/Merchant/Plan.vue';
+import MerchantDashboard from "./Pages/Dashboard/Merchant/OverviewList.vue";
+import MerchantProfile from "./Pages/Dashboard/Merchant/ProfileList.vue";
+import MerchantDiscount from "./Pages/Dashboard/Merchant/DiscountList.vue";
+import MerchantAnalytics from "./Pages/Dashboard/Merchant/Analytics.vue";
+import MerchantRaffle from "./Pages/Dashboard/Merchant/Raffle/RaffleList.vue";
+import MerchantDeals from "./Pages/Dashboard/Merchant/FlashDeals/FlashDealsMain.vue";
+import MerchantLogs from "./Pages/Dashboard/Merchant/ActivityLog.vue";
+import MerchantBilling from "./Pages/Dashboard/Merchant/Billing.vue";
+import MerchantPlan from "./Pages/Dashboard/Merchant/Plan.vue";
+import MerchantNotification from "./Pages/Dashboard/Merchant/notification.vue";
 
 // import MerchantDashboard from './Pages/Merchant/Dashboard/Dashboard.vue';
 // import MerchantScanner from './Pages/Merchant/Scanner/Qr-Code.vue';
@@ -53,6 +53,11 @@ import MerchantPlan from './Pages/Dashboard/Merchant/Plan.vue';
 // import CartList from './Pages/Merchant/Voucher/cartlist.vue';
 // import OrderPoints from './Pages/Merchant/Orders/orderPoints.vue';
 
+import CustomerProfile from "./Pages/Dashboard/Customer/ProfileList.vue";
+import CustomerDiscount from "./Pages/Dashboard/Customer/DiscountList.vue";
+import CustomerRaffle from "./Pages/Dashboard/Customer/RaffleList.vue";
+import CustomerCollection from "./Pages/Dashboard/Customer/CollectionList.vue";
+import CustomerLog from "./Pages/Dashboard/Customer/ActivityLogList.vue";
 // import OrdeLists from './Pages/Merchant/Orders/list.vue';
 
 // // Import influencer
@@ -74,41 +79,35 @@ import MerchantPlan from './Pages/Dashboard/Merchant/Plan.vue';
 // import Profile from './Pages/Profiles/Information.vue';
 // import NotFound from './Pages/Error/404.vue';
 
-import Index from './Pages/Home/HomeList.vue';
-import About from './Pages/About/AboutUsList.vue';
-import Tripidkard from './Pages/Tripidkard/TripidkardList.vue';
-import MerchantPage from './Pages/Merchant/Pages.vue';
-import JoinRaffle from './Pages/Merchant/Raffle.vue';
-import RaffleDetails from './Pages/Merchant/RaffleDetails.vue';
-import MerchantCenter from './Pages/Merchant/Center.vue';
-import MerchantSignup from './Pages/Merchant/SignUp.vue';
-import CustomerSignup from './Pages/Customer/Signup.vue';
-import MerchantLogin from './Pages/Login/Login.vue';
+import Index from "./Pages/Home/HomeList.vue";
+import About from "./Pages/About/AboutUsList.vue";
+import Tripidkard from "./Pages/Tripidkard/TripidkardList.vue";
+import MerchantPage from "./Pages/Merchant/Pages.vue";
+import JoinRaffle from "./Pages/Merchant/Raffle.vue";
+import RaffleDetails from "./Pages/Merchant/RaffleDetails.vue";
+import MerchantCenter from "./Pages/Merchant/Center.vue";
+import MerchantSignup from "./Pages/Merchant/SignUp.vue";
+import CustomerSignup from "./Pages/Customer/Signup.vue";
+import MerchantLogin from "./Pages/Login/Login.vue";
 // import CustomerFAQ from './Pages/Home/Tripidkard/CustomerFAQ.vue';
 // import MerchantFAQ from './Pages/Home/Tripidkard/MerchantFAQ.vue';
-// import MerchantDetails from './Pages/Home/Merchant/MerchantList.vue';
-// import MerchantWeb from './Pages/Home/Websites/MerchantWeb.vue';
-// import JoinForm from './Pages/Home/JoinForm/JoinList.vue';
-// import ContactUs from './Pages/Home/Contact/ContactUsList.vue';
-// import MerchantResultCity from './Pages/Home/Result/MerchantResultCity.vue';
-// import MerchantResultProvince from './Pages/Home/Result/MerchantResultProvince.vue';
-// import MerchantProfile from './Pages/Merchant/Profile/ProfileList.vue';
-
-// import Scanner from './Pages/Home/Scanner/index.vue';
-// import ScannerResult from './Pages/Home/ScannerResult/index.vue';
 
 // import Raffle from './Pages/Home/JoinTheFun/Raffle.vue';
 // import Points from './Pages/Home/JoinTheFun/Points.vue';
 // import Events from './Pages/Home/JoinTheFun/Events.vue';
 
 const routesAdmin = [
-    { path: '/admin/dashboard/', name: 'admin.dashboard', component: AdminDashboard, meta: { title: 'Admin Dashboard', breadcrumb: 'admin/dasboard' } },
+    {
+        path: "/admin/dashboard/",
+        name: "admin.dashboard",
+        component: AdminDashboard,
+        meta: { title: "Admin Dashboard", breadcrumb: "admin/dasboard" },
+    },
     // { path: '/admin/merchant/', name: 'admin.merchant', component: AdminMerchant, meta: { title: 'Merchant Listing', requiresAdminAuth: true } },
     // { path: '/admin/merchant-pending/', name: 'admin.merchant-pending', component: AdminMerchantPending, meta: { title: 'Merchant Pending', requiresAdminAuth: true } },
     // { path: '/admin/merchant/register', name: 'admin.merchant.register', component: AdminMerchantForm, meta: { title: 'Merchant Register', requiresAdminAuth: true } },
     // { path: '/admin/merchant/:id/edit', name: 'admin.merchant.edit', component: AdminMerchantForm, meta: { title: 'Merchant Update', requiresAdminAuth: true } },
     // { path: '/admin/merchant/archive', name: 'admin.merchant.archive', component: AdminMerchantArchive, meta: { title: 'Merchant Archive', requiresAdminAuth: true } },
-
 
     // { path: '/admin/influencer/', name: 'admin.influencer', component: AdminInfluencer, meta: { title: 'Influencer List', requiresAdminAuth: true } },
     // { path: '/admin/influencer-pending/', name: 'admin.influencer-pending', component: AdminInfluencerPending, meta: { title: 'Influencer Pending', requiresAdminAuth: true } },
@@ -117,7 +116,6 @@ const routesAdmin = [
     // { path: '/admin/influencer/archive', name: 'admin.influencer.archive', component: AdminInfluencerArchive, meta: { title: 'Influencer Archive', requiresAdminAuth: true } },
 
     // { path: '/admin/scanner', name: 'admin.scanner', component: AdminScanner, meta: { title: 'Admin Scanner', requiresAdminAuth: true } },
-
 
     // { path: '/admin/tripidkard/', name: 'admin.tripidkard', component: AdminTripidkard, meta: { title: 'Tripidkard List', requiresAdminAuth: true } },
     // { path: '/admin/tripidkard/register', name: 'admin.tripidkard.register', component: AdminTripidkardForm, meta: { title: 'Tripidkard Register', requiresAdminAuth: true } },
@@ -136,16 +134,111 @@ const routesAdmin = [
     // { path: '/admin/profile/', name: 'admin.profile', component: AdminProfile, meta: { title: 'Profile Information', requiresAdminAuth: true } },
 ];
 
-const routesMerchant = [
-    { path: '/merchant/dashboard/', name: 'admin.dashboard', component: MerchantDashboard, meta: { title: 'Merchant Dashboard', breadcrumb: 'merchant/dasboard' } },
-    { path: '/merchant/profile/', name: 'admin.profile', component: MerchantProfile, meta: { title: 'Merchant Profile', breadcrumb: 'merchant/profile' } },
-    { path: '/merchant/discount-list/', name: 'admin.discount-list', component: MerchantDiscount, meta: { title: 'Merchant Discount List', breadcrumb: 'merchant/discount-list' } },
-    { path: '/merchant/activity-log/', name: 'merchant.activity-log', component: MerchantLogs, meta: { title: 'Activity Logs List', breadcrumb: 'merchant/activity-log'} },
-    { path: '/merchant/analytics/', name: 'merchant.analytics', component: MerchantAnalytics, meta: { title: 'Data Analytics', breadcrumb: 'merchant/analytics'} },
-    { path: '/merchant/raffle-draw/', name: 'merchant.raffle-draw', component: MerchantRaffle, meta: { title: 'Raffle Draw', breadcrumb: 'merchant/raffle-draw'} },
-    { path: '/merchant/billing/', name: 'merchant.billing', component: MerchantBilling, meta: { title: 'Billing', breadcrumb: 'merchant/billing'} },
-    { path: '/merchant/flash-deals/', name: 'merchant.flash-deals', component: MerchantDeals, meta: { title: 'Flash Deals', breadcrumb: 'merchant/flash-deals'} },
+const routesCustomer = [
+    {
+        path: "/customer/profile/",
+        name: "customer.profile",
+        component: CustomerProfile,
+        meta: { title: "Customer Profile", breadcrumb: "/customer/profile/" },
+    },
+    {
+        path: "/customer/discount/",
+        name: "customer.discount",
+        component: CustomerDiscount,
+        meta: { title: "Customer Discount Transaction", breadcrumb: "/customer/discount/" },
+    },
 
+    {
+        path: "/customer/raffle/",
+        name: "customer.raffle",
+        component: CustomerRaffle,
+        meta: { title: "Customer Raffle Draw", breadcrumb: "/customer/raffle/" },
+    },
+
+    {
+        path: "/customer/collection/",
+        name: "customer.collection",
+        component: CustomerCollection,
+        meta: { title: "Customer Collection", breadcrumb: "/customer/collection/" },
+    },
+
+    {
+        path: "/customer/activity-log/",
+        name: "customer.activity-log",
+        component: CustomerLog,
+        meta: { title: "Customer Activity Log", breadcrumb: "/customer/activity-log/" },
+    },
+
+];
+
+const routesMerchant = [
+    {
+        path: "/merchant/dashboard/",
+        name: "admin.dashboard",
+        component: MerchantDashboard,
+        meta: { title: "Merchant Dashboard", breadcrumb: "merchant/dasboard" },
+    },
+    {
+        path: "/merchant/profile/",
+        name: "admin.profile",
+        component: MerchantProfile,
+        meta: { title: "Merchant Profile", breadcrumb: "merchant/profile" },
+    },
+    {
+        path: "/merchant/discount-list/",
+        name: "admin.discount-list",
+        component: MerchantDiscount,
+        meta: {
+            title: "Merchant Discount List",
+            breadcrumb: "merchant/discount-list",
+        },
+    },
+    {
+        path: "/merchant/activity-log/",
+        name: "merchant.activity-log",
+        component: MerchantLogs,
+        meta: {
+            title: "Activity Logs List",
+            breadcrumb: "merchant/activity-log",
+        },
+    },
+    {
+        path: "/merchant/analytics/",
+        name: "merchant.analytics",
+        component: MerchantAnalytics,
+        meta: { title: "Data Analytics", breadcrumb: "merchant/analytics" },
+    },
+    {
+        path: "/merchant/raffle-draw/",
+        name: "merchant.raffle-draw",
+        component: MerchantRaffle,
+        meta: { title: "Raffle Draw", breadcrumb: "merchant/raffle-draw" },
+    },
+    {
+        path: "/merchant/billing/",
+        name: "merchant.billing",
+        component: MerchantBilling,
+        meta: { title: "Billing", breadcrumb: "merchant/billing" },
+    },
+    {
+        path: "/merchant/flash-deals/",
+        name: "merchant.flash-deals",
+        component: MerchantDeals,
+        meta: { title: "Flash Deals", breadcrumb: "merchant/flash-deals" },
+    },
+
+    {
+        path: "/merchant/notification/",
+        name: "merchant.notification",
+        component: MerchantNotification,
+        meta: { title: "Merchant Notification", breadcrumb: "merchant/notification" },
+    },
+    {
+        path: "/merchant/plan/",
+        name: "merchant.plan",
+        component: MerchantPlan,
+        meta: { title: "Merchant Plan", breadcrumb: "merchant/plan" },
+    },
     // { path: '/merchant/dashboard', name: 'merchant.dashboard', component: MerchantDashboard, meta: { title: 'Merchant Dashboard', requiresMerchantAuth: true } },
     // { path: '/merchant/scanner', name: 'merchant.scanner', component: MerchantScanner, meta: { title: 'QR Code Scanner', requiresMerchantAuth: true } },
     // { path: '/merchant/tripidkard/', name: 'merchant.tripidkard', component: MerchantTripidkard, meta: { title: 'Tripidkard List', requiresMerchantAuth: true } },
@@ -157,7 +250,6 @@ const routesMerchant = [
     // { path: '/merchant/customer/:card_number/scan', name: 'merchant.customer.scan', component: MerchantCustomerForm, meta: { title: 'Customer Register', requiresMerchantAuth: true } },
     // { path: '/merchant/loyalty-stars', name: 'merchant.loyalty-stars', component: MerchantLoyaltyPoint, meta: { title: 'Loyalty Stars List', requiresMerchantAuth: true } },
     // { path: '/merchant/discounts', name: 'merchant.discounts', component: MerchantLoyaltyDiscount, meta: { title: 'Discount List', requiresMerchantAuth: true } },
-
 
     // { path: '/merchant/create/voucher', name: 'merchant.create.voucher', component: createVoucher, meta: { title: 'Create Voucher', requiresMerchantAuth: true } },
     // { path: '/merchant/list/voucher', name: 'merchant.list.voucher', component: VoucherList, meta: { title: 'List Voucher', requiresMerchantAuth: true } },
@@ -176,21 +268,67 @@ const routesInfluencer = [
     // { path: '/influencer/customer/:card_number/scan', name: 'influencer.customer.scan', component: InfluencerCustomerForm, meta: { title: 'Customer Register', requiresInfluencerAuth: true } },
     // { path: '/influencer/profile/', name: 'influencer.profile', component: InfluencerProfile, meta: { title: 'Profile Information', requiresInfluencerAuth: true } },
     // { path: '/influencer/activity-log/', name: 'influencer.activity-log', component: InfluencerLogs, meta: { title: 'Activity Logs List', requiresInfluencerAuth:true } },
-
-]
+];
 
 const routesDefault = [
-    { path: '/', name: 'home', component: Index, meta: { title: 'Home' } },
-    { path: '/about-us', name: 'about-us', component: About, meta: { title: 'About Us' } },
-    { path: '/tripidkard', name: 'tripidkard', component: Tripidkard, meta: { title: 'Tripidkard' } },
-    { path: '/merchant/page', name: 'merchant.page', component: MerchantPage, meta: { title: 'Merchant Page', breadcrumb: 'Home/Merchant/Page' } },
-    { path: '/join/raffle', name: 'join.raffle', component: JoinRaffle, meta: { title: 'Merchant Page', breadcrumb: 'Home/Merchant/Page' } },
-    { path: '/raffle/details', name: 'raffle.details', component: RaffleDetails, meta: { title: 'Merchant Page', breadcrumb: 'Home/Merchant/Page' } },
-    { path: '/merchant/signup', name: 'merchant.signup', component: MerchantSignup, meta: { title: 'Merchant Signup', breadcrumb: 'Home/Merchant/Signup' } },
-    { path: '/customer/signup', name: 'customer.signup', component: CustomerSignup, meta: { title: 'Customer Signup', breadcrumb: 'Home/Customer/Signup' } },
-    { path: '/login', name: 'login', component: MerchantLogin, meta: { title: 'Merchant Login', breadcrumb: 'Home/Merchant/Login' } },
-    { path: '/help/center', name: 'help.center', component: MerchantCenter, meta: { title: 'Merchant Help center', breadcrumb: 'Home/Merchant/Page' } },
-
+    { path: "/", name: "home", component: Index, meta: { title: "Home" } },
+    {
+        path: "/about-us",
+        name: "about-us",
+        component: About,
+        meta: { title: "About Us" },
+    },
+    {
+        path: "/tripidkard",
+        name: "tripidkard",
+        component: Tripidkard,
+        meta: { title: "Tripidkard" },
+    },
+    {
+        path: "/merchant/page",
+        name: "merchant.page",
+        component: MerchantPage,
+        meta: { title: "Merchant Page", breadcrumb: "Home/Merchant/Page" },
+    },
+    {
+        path: "/join/raffle",
+        name: "join.raffle",
+        component: JoinRaffle,
+        meta: { title: "Merchant Page", breadcrumb: "Home/Merchant/Page" },
+    },
+    {
+        path: "/raffle/details",
+        name: "raffle.details",
+        component: RaffleDetails,
+        meta: { title: "Merchant Page", breadcrumb: "Home/Merchant/Page" },
+    },
+    {
+        path: "/merchant/signup",
+        name: "merchant.signup",
+        component: MerchantSignup,
+        meta: { title: "Merchant Signup", breadcrumb: "Home/Merchant/Signup" },
+    },
+    {
+        path: "/customer/signup",
+        name: "customer.signup",
+        component: CustomerSignup,
+        meta: { title: "Customer Signup", breadcrumb: "Home/Customer/Signup" },
+    },
+    {
+        path: "/login",
+        name: "login",
+        component: MerchantLogin,
+        meta: { title: "Merchant Login", breadcrumb: "Home/Merchant/Login" },
+    },
+    {
+        path: "/help/center",
+        name: "help.center",
+        component: MerchantCenter,
+        meta: {
+            title: "Merchant Help center",
+            breadcrumb: "Home/Merchant/Page",
+        },
+    },
 
     // { path: '/profile/', name: 'profile', component: Profile, meta: { title: 'Profile' } },
     // { path: '/merchants/', name: 'merchants', component: MerchantDetails, meta: { title: 'Merchant' } },
@@ -215,4 +353,10 @@ const routesDefault = [
     // { path: '/:pathMatch(.*)*', name: 'not-found', component: NotFound, meta: { title: 'Not Found' } }
 ];
 
-export { routesAdmin, routesMerchant, routesInfluencer, routesDefault };
+export {
+    routesAdmin,
+    routesMerchant,
+    routesCustomer,
+    routesInfluencer,
+    routesDefault,
+};

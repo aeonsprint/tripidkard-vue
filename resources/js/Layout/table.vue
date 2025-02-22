@@ -24,25 +24,25 @@
             </div>
 
             <!-- Table -->
-            <div :class="['overflow-hidden', tableData.length ? 'border border-gray-200 shadow-sm rounded-lg' : '']">
+            <div :class="['overflow-hidden', filteredData.length ? 'border border-gray-200 shadow-sm rounded-lg' : '']">
               <table class="min-w-full">
                 <thead class="bg-gray-100 border-b border-gray-200">
                   <tr>
-                    <th class="py-3 px-4 text-left text-sm font-semibold text-gray-600">Name</th>
-                    <th class="py-3 px-4 text-left text-sm font-semibold text-gray-600">Age</th>
-                    <th class="py-3 px-4 text-left text-sm font-semibold text-gray-600">Address</th>
+                    <th v-for="(col, index) in columns" :key="index" class="py-3 px-4 text-left text-sm font-semibold text-gray-600">
+                      {{ col.label }}
+                    </th>
                   </tr>
                 </thead>
                 <tbody v-if="filteredData.length" class="divide-y divide-gray-200">
                   <tr v-for="(item, index) in filteredData" :key="index">
-                    <td class="py-3 px-4 text-sm font-medium text-gray-800">{{ item.name }}</td>
-                    <td class="py-3 px-4 text-sm text-gray-800">{{ item.age }}</td>
-                    <td class="py-3 px-4 text-sm text-gray-800">{{ item.address }}</td>
+                    <td v-for="(col, colIndex) in columns" :key="colIndex" class="py-3 px-4 text-sm text-gray-800">
+                      {{ item[col.key] }}
+                    </td>
                   </tr>
                 </tbody>
                 <tbody v-else>
                   <tr>
-                    <td colspan="3" class="py-3 px-4 text-sm text-gray-500 text-center">No data found</td>
+                    <td :colspan="columns.length" class="py-3 px-4 text-sm text-gray-500 text-center">No data found</td>
                   </tr>
                 </tbody>
               </table>
@@ -55,16 +55,19 @@
 
   <script>
   export default {
+    props: {
+      tableData: {
+        type: Array,
+        required: true
+      },
+      columns: {
+        type: Array,
+        required: true
+      }
+    },
     data() {
       return {
-        searchQuery: '',
-        tableData: [
-          { name: 'John Doe', age: 28, address: '123 Main St, New York' },
-          { name: 'Jane Smith', age: 34, address: '456 Elm St, California' },
-          { name: 'Michael Johnson', age: 40, address: '789 Pine St, Texas' },
-          { name: 'Sarah Brown', age: 25, address: '101 Maple St, Florida' },
-          { name: 'Chris Evans', age: 30, address: '222 Oak St, Chicago' }
-        ]
+        searchQuery: ''
       };
     },
     computed: {

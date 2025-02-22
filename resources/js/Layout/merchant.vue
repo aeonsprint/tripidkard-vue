@@ -66,6 +66,7 @@
                         </div>
                     </div>
 
+
                     <div class="flex justify-end items-center mt-4 bg-white p-2 rounded-lg">
                         <button :disabled="currentPage === 1" @click="currentPage--" class="bg-white text-gray-800 px-4 py-2 rounded-lg hover:bg-blue-500 hover:text-white disabled:bg-gray-300 disabled:text-gray-500">
                             Previous

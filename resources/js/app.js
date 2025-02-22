@@ -5,12 +5,12 @@ import '@fortawesome/fontawesome-free/css/all.css';  // Import Font Awesome
 
 import { createApp } from 'vue/dist/vue.esm-bundler.js';
 import { createRouter, createWebHistory } from 'vue-router';
-import { routesAdmin, routesMerchant, routesInfluencer, routesDefault } from './routes.js';
+import { routesAdmin, routesMerchant, routesInfluencer, routesCustomer, routesDefault } from './routes.js';
 import { createPinia } from 'pinia';
 import { useAuthStore } from './Stores/auth';
 
 const router = createRouter({
-    routes: [...routesAdmin, ...routesMerchant, ...routesInfluencer, ...routesDefault],
+    routes: [...routesAdmin, ...routesMerchant, ...routesCustomer, ...routesInfluencer, ...routesDefault],
     history: createWebHistory(),
 });
 

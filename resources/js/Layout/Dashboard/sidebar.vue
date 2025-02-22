@@ -195,11 +195,14 @@ bg-white border-e border-gray-200 dark:bg-neutral-800 dark:border-neutral-700" r
                         <p class="text-gray-600 text-sm">
                             Get access to premium features and unlock your full potential
                         </p>
-                        <button
+                       <div class="mt-6">
+                        <router-link to="/merchant/plan"
                             class="bg-blue-600 text-white mt-4 px-6 py-3 rounded-lg w-full font-semibold hover:bg-blue-700 transition">
-                            Upgrade Plan
-                        </button>
+                                Upgrade Plan
+                            </router-link>
+                       </div>
                     </div>
+
                 </div>
             </div>
         </div>
