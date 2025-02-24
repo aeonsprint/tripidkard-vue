@@ -33,6 +33,7 @@ class CustomerSeeder extends Seeder
                 "city"=> $data[9],
                 "province"=> $data[10],
                 "status"=> $data[11],
+                "role"=> $data[12],
             ]);
 
         endwhile;

@@ -67,6 +67,7 @@ class ProfileController extends Controller
             'mname' => '',
             'lname' => 'required',
             'email' => 'required|unique:users,email,' . $user->id,
+            'business_name' => 'required',
             'contact' => 'required|unique:users,contact,' . $user->id,
         ]);
 
@@ -86,11 +87,11 @@ class ProfileController extends Controller
             ? $user->blog_name
             : trim($user->fname . ' ' . $user->mname . ' ' . $user->lname));
 
-        activity()
-            ->performedOn($user)
-            ->causedBy($user)
-        ->withProperties(['role' => $user->role, 'status' => $user->status])
-        ->log("$name updated their profile.");
+        // activity()
+        //     ->performedOn($user)
+        //     ->causedBy($user)
+        // ->withProperties(['role' => $user->role, 'status' => $user->status])
+        // ->log("$name updated their profile.");
 
         return response()->json(['message' => 'User information updated successfully'], 200);
     }
@@ -113,7 +114,6 @@ class ProfileController extends Controller
             $validate = $request->validate([
                 'discount' => 'required',
                 'description' => 'required',
-                'tagline' => 'required',
             ]);
             $validatedData = $request->only(['discount', 'description', 'tagline']);
             // I-update ang impormasyon ng negosyo
@@ -144,11 +144,11 @@ class ProfileController extends Controller
                 ? $user->blog_name
                 : trim($user->fname . ' ' . $user->mname . ' ' . $user->lname));
 
-            activity()
-                ->performedOn($user)
-                ->causedBy($user)
-            ->withProperties(['role' => $user->role, 'status' => $user->status])
-            ->log("$name updated their business information.");
+            // activity()
+            //     ->performedOn($user)
+            //     ->causedBy($user)
+            // ->withProperties(['role' => $user->role, 'status' => $user->status])
+            // ->log("$name updated their business information.");
 
             return response()->json(['message' => 'Business information updated successfully'], 200);
         }
@@ -189,11 +189,11 @@ class ProfileController extends Controller
                     : trim($user->fname . ' ' . $user->mname . ' ' . $user->lname));
 
             // Log the activity
-            activity()
-                ->performedOn($user)
-                ->causedBy($user)
-                ->withProperties(['role' => $user->role, 'status' => $user->status])
-                ->log("$name uploaded their profile picture.");
+            // activity()
+            //     ->performedOn($user)
+            //     ->causedBy($user)
+            //     ->withProperties(['role' => $user->role, 'status' => $user->status])
+            //     ->log("$name uploaded their profile picture.");
 
             return response()->json(['message' => 'Profile Picture Uploaded Successfully']);
         }
@@ -242,16 +242,16 @@ class ProfileController extends Controller
             'photo2' => 'nullable|image|max:2048',
             'photo3' => 'nullable|image|max:2048',
         ]);
-    
+
         $user = $request->user();
         $merchant = Merchant::where('user_id', $user->id)->first();
         $path = 'photos/background';
-    
+
         // Ensure the directory exists
         if (!Storage::disk('public')->exists($path)) {
             Storage::disk('public')->makeDirectory($path);
         }
-    
+
         $paths = [];
         foreach (['photo1', 'photo2', 'photo3'] as $photo) {
             if ($request->hasFile($photo)) {
@@ -259,22 +259,22 @@ class ProfileController extends Controller
                 if ($merchant->$photo) {
                     Storage::disk('public')->delete($merchant->$photo);
                 }
-    
+
                 // Save the new file and store its path
                 $paths[$photo] = Storage::disk('public')->put($path, $request->file($photo));
             }
         }
-    
+
         // Update the merchant's photo columns in the database
         $merchant->update([
             'photo1' => $paths['photo1'] ?? $merchant->photo1,
             'photo2' => $paths['photo2'] ?? $merchant->photo2,
             'photo3' => $paths['photo3'] ?? $merchant->photo3,
         ]);
-    
+
         return response()->json(['message' => 'Images Uploaded Successfully', 'paths' => $paths]);
     }
-    
+
 
 //     public function uploadBackground(Request $request)
 // {
@@ -308,31 +308,31 @@ class ProfileController extends Controller
 
 
 
-    public function changePassword(Request $request, UpdateUserPasswordAction $updater)
-    {
+    // public function changePassword(Request $request, UpdateUserPasswordAction $updater)
+    // {
 
-        $updater->update(
-            auth()->user(),
-            [
-                'current_password' => $request->currentPassword,
-                'password' => $request->password,
-                'password_confirmation' => $request->passwordConfirmation,
-            ]
-        );
-        $user = Auth::user();
-        // Get the authenticated user
-        $user = Auth::user();
-        $name = $user->role === 'Merchant'
-        ? $user->business_name
-        : ($user->role === 'Influencer'
-            ? $user->blog_name
-            : trim($user->fname . ' ' . $user->mname . ' ' . $user->lname));
+    //     $updater->update(
+    //         // auth()->user(),
+    //         [
+    //             'current_password' => $request->currentPassword,
+    //             'password' => $request->password,
+    //             'password_confirmation' => $request->passwordConfirmation,
+    //         ]
+    //     );
+    //     $user = Auth::user();
+    //     // Get the authenticated user
+    //     $user = Auth::user();
+    //     $name = $user->role === 'Merchant'
+    //     ? $user->business_name
+    //     : ($user->role === 'Influencer'
+    //         ? $user->blog_name
+    //         : trim($user->fname . ' ' . $user->mname . ' ' . $user->lname));
 
-        activity()
-            ->performedOn($user)
-            ->causedBy($user)
-        ->withProperties(['role' => $user->role, 'status' => $user->status])
-        ->log("$name changed their password.");
-        return response()->json(['message' => 'Password change Successfuly']);
-    }
+    //     activity()
+    //         ->performedOn($user)
+    //         ->causedBy($user)
+    //     ->withProperties(['role' => $user->role, 'status' => $user->status])
+    //     ->log("$name changed their password.");
+    //     return response()->json(['message' => 'Password change Successfuly']);
+    // }
 }

@@ -26,6 +26,8 @@ return new class extends Migration
             $table->string('street');
             $table->string('city');
             $table->string('province');
+            $table->string('website')->nullable();
+            $table->string('facebook')->nullable();
             $table->string('logo')->nullable();
             $table->timestamps();
         });

@@ -4,9 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\Point;
 use App\Models\Customer;
+use App\Mail\AccountEmail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use App\Http\Controllers\CardCodesController;
 use App\Models\CardCode; // Import ng CardCode model
 
@@ -32,6 +35,27 @@ class CustomerController extends Controller
         return response()->json($customer);
 
     }
+
+    public function indexArchive()
+    {
+
+        $searchFields = ['customer_card_num', 'fname', 'mname', 'lname', 'contact', 'email', 'zip', 'street', 'city', 'province', 'validity'];
+        $customer = Customer::query()
+            ->where('status', 5)
+            ->when(request('query'), function ($query, $searchQuery) use ($searchFields) {
+                $query->where(function ($query) use ($searchFields, $searchQuery) {
+                    foreach ($searchFields as $field) {
+                        $query->orWhere($field, 'like', "%{$searchQuery}%");
+                    }
+                });
+            })
+
+            ->latest()->get();
+
+        return response()->json($customer);
+
+    }
+
 
     public function indexUser()
     {
@@ -74,27 +98,27 @@ class CustomerController extends Controller
 
 
 
-    public function points($id)
-    {
-        $searchFields = ['customer_card_num', 'fname', 'mname', 'lname', 'points', 'points.created_at'];
+    // public function points($id)
+    // {
+    //     $searchFields = ['customer_card_num', 'fname', 'mname', 'lname', 'points', 'points.created_at'];
 
-        $points = Point::query() // Use Point::query() as the primary model
-            ->select('customers.id as customer_id', 'customers.*', 'points.created_at as point_created_at', 'points.*') // Alias 'customers.id' as 'customer_id'
-            ->leftJoin('customers', 'customers.customer_card_num', '=', 'points.card_number') // Join with customers table
-            ->where('customers.status', 1) // Check status on customers table
-            ->where('customers.id', $id) // Filter by customer_id in points table
-            ->when(request('query'), function ($query, $searchQuery) use ($searchFields) {
-                $query->where(function ($query) use ($searchFields, $searchQuery) {
-                    foreach ($searchFields as $field) {
-                        $query->orWhere($field, 'like', "%{$searchQuery}%");
-                    }
-                });
-            })
-            ->orderBy('points.created_at', 'desc') // Order by points.created_at
-            ->get();
+    //     $points = Point::query() // Use Point::query() as the primary model
+    //         ->select('customers.id as customer_id', 'customers.*', 'points.created_at as point_created_at', 'points.*') // Alias 'customers.id' as 'customer_id'
+    //         ->leftJoin('customers', 'customers.customer_card_num', '=', 'points.card_number') // Join with customers table
+    //         ->where('customers.status', 1) // Check status on customers table
+    //         ->where('customers.id', $id) // Filter by customer_id in points table
+    //         ->when(request('query'), function ($query, $searchQuery) use ($searchFields) {
+    //             $query->where(function ($query) use ($searchFields, $searchQuery) {
+    //                 foreach ($searchFields as $field) {
+    //                     $query->orWhere($field, 'like', "%{$searchQuery}%");
+    //                 }
+    //             });
+    //         })
+    //         ->orderBy('points.created_at', 'desc') // Order by points.created_at
+    //         ->get();
 
-        return response()->json($points);
-    }
+    //     return response()->json($points);
+    // }
 
     public function customerResult($cardNumber)
     {
@@ -129,10 +153,45 @@ class CustomerController extends Controller
     }
 
 
+    public function archive(Request $request, $id)
+    {
+        $user = Customer::findOrFail($id);
+        $status = $request->input('status');
+        $user->update(['status' => $status]);
+        return response()->json(['message' => 'Customer status updated successfully.']);
+    }
+
+    public function approve(Request $request, $id)
+    {
+        // Find the user by ID or throw a 404 error if not found
+        $user = Customer::findOrFail($id);
+
+        // Retrieve the status from the request
+        $status = $request->input('status');
+
+         // Retrieve email and business code
+         $email = $user->email;
+         $passowrd = $user->customer_card_num;
+
+         $user->update([
+            'status' => $status,
+            'password' => Hash::make($user->customer_card_num) // Update password securely
+        ]);
+
+        // Prepare the email details
+        $subject = 'Merchant Account Activation';
+        $message = $passowrd;
+
+        // Send email to the user's email address
+        Mail::to($email)->send(new AccountEmail($message, $subject, $email));
+
+        // Return a JSON response confirming success
+        return response()->json(['message' => 'Customer status updated and email sent successfully.']);
+    }
 
     public function store(Request $request)
     {
-        $user = auth()->user();
+        // $user = auth()->user();
 
         $validated = $request->validate([
             'customer_card_num' => 'required',
@@ -230,45 +289,45 @@ class CustomerController extends Controller
         return response()->json(['success' => true]);
 
     }
-    public function count()
-    {
-        $user = auth()->user(); // Get the authenticated user
+    // public function count()
+    // {
+    //     $user = auth()->user(); // Get the authenticated user
 
-        if ($user->role === 'Admin') {
-            // Admin counts all customers
-            $customerCount = Customer::where('status', 1)->count();
-        } elseif ($user->role === 'Merchant' || $user->role === 'Influencer') {
-            // Merchant or Influencer counts only their own customers
-            $customerCount = Customer::join('card_codes', 'customers.customer_card_num', '=', 'card_codes.card_number')
-                ->where('customers.status', 1)
-                ->where('card_codes.user_id', $user->id) // Filter by the user's ID
-                ->count();
-        } else {
-            // If the role doesn't match, return 0 or an appropriate message
-            $customerCount = 0; // or return response()->json(['error' => 'Unauthorized'], 403);
-        }
+    //     if ($user->role === 'Admin') {
+    //         // Admin counts all customers
+    //         $customerCount = Customer::where('status', 1)->count();
+    //     } elseif ($user->role === 'Merchant' || $user->role === 'Influencer') {
+    //         // Merchant or Influencer counts only their own customers
+    //         $customerCount = Customer::join('card_codes', 'customers.customer_card_num', '=', 'card_codes.card_number')
+    //             ->where('customers.status', 1)
+    //             ->where('card_codes.user_id', $user->id) // Filter by the user's ID
+    //             ->count();
+    //     } else {
+    //         // If the role doesn't match, return 0 or an appropriate message
+    //         $customerCount = 0; // or return response()->json(['error' => 'Unauthorized'], 403);
+    //     }
 
-        return response()->json(['count' => $customerCount]);
-    }
+    //     return response()->json(['count' => $customerCount]);
+    // }
 
-    public function barGraph()
-    {
-        $user = auth()->user(); // Get the authenticated user
-        $query = Customer::query()->where('status', 1);
+    // public function barGraph()
+    // {
+    //     $user = auth()->user(); // Get the authenticated user
+    //     $query = Customer::query()->where('status', 1);
 
-        if ($user->role === 'Merchant' || $user->role === 'Influencer') {
-            $query->join('card_codes', 'customers.customer_card_num', '=', 'card_codes.card_number')
-                ->where('card_codes.user_id', $user->id); // Filter by the user's ID
-        }
+    //     if ($user->role === 'Merchant' || $user->role === 'Influencer') {
+    //         $query->join('card_codes', 'customers.customer_card_num', '=', 'card_codes.card_number')
+    //             ->where('card_codes.user_id', $user->id); // Filter by the user's ID
+    //     }
 
-        $monthlyCounts = $query
-            ->selectRaw('MONTH(created_at) as month, COUNT(*) as count')
-            ->groupBy('month')
-            ->orderBy('month')
-            ->get();
+    //     $monthlyCounts = $query
+    //         ->selectRaw('MONTH(created_at) as month, COUNT(*) as count')
+    //         ->groupBy('month')
+    //         ->orderBy('month')
+    //         ->get();
 
-        return response()->json($monthlyCounts);
-    }
+    //     return response()->json($monthlyCounts);
+    // }
 
 
 

@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Hash;
 
 class MerchantController extends Controller
 {
@@ -19,7 +20,6 @@ class MerchantController extends Controller
             'dti',
             'business_code',
             'business_name',
-            'dti',
             'business_category',
             'discount',
             'zip',
@@ -31,36 +31,54 @@ class MerchantController extends Controller
             'users.mname',
             'users.lname',
             'users.contact',
-            'users.email'
+            'users.email',
+            'merchants.city',
+            'merchants.province',
         ];
 
         $merchants = Merchant::query()
-        ->select('merchants.id AS merchant_id', 'merchants.*', 'users.*')
-        ->leftJoin('users', 'merchants.user_id', '=', 'users.id')
-        ->when(request('query'), function ($query, $searchQuery) use ($searchFields) {
-            $query->where(function ($query) use ($searchFields, $searchQuery) {
-                foreach ($searchFields as $field) {
-                    $query->orWhere($field, 'like', "%{$searchQuery}%");
-                }
-            });
-        })
-        ->when(request('category'), function ($query, $category) {
-            $query->where('business_category', 'like', "%{$category}%");
-        })
-        ->when(request("city"), function ($query, $city) {
-            $query->where("city", "like", "%{$city}%");
-        })
-        ->when(request("province"), function ($query, $province) {
-            $query->where("province", "like", "%{$province}%");
-        })
-        // Explicitly specify users.status to ensure filtering is correct
-        ->where('users.status', '=', '1')
-        ->orderBy('stars_points', 'desc')
-        ->orderBy('discount', 'desc')
-        ->get();
+            ->select([
+                'merchants.id AS merchant_id',
+                'merchants.business_name',
+                'merchants.business_category',
+                'merchants.business_sub_category',
+                'merchants.discount',
+                'merchants.stars_points',
+                'users.id AS user_id',
+                'users.email',
+                'users.contact',
+                'merchants.city',
+                'merchants.province',
+                // Concatenate full name
+                DB::raw("CONCAT_WS(' ', COALESCE(users.fname, ''), COALESCE(users.mname, ''), COALESCE(users.lname, '')) AS merchant_name"),
+                // Concatenate full address
+                DB::raw("CONCAT_WS(', ', COALESCE(merchants.street, ''), COALESCE(merchants.city, ''), COALESCE(merchants.province, ''), COALESCE(merchants.zip, '')) AS address")
+            ])
+            ->leftJoin('users', 'merchants.user_id', '=', 'users.id')
+            ->when(request('query'), function ($query, $searchQuery) use ($searchFields) {
+                $query->where(function ($query) use ($searchFields, $searchQuery) {
+                    foreach ($searchFields as $field) {
+                        $query->orWhere($field, 'like', "%{$searchQuery}%");
+                    }
+                });
+            })
+            ->when(request('category'), function ($query, $category) {
+                $query->where('business_category', 'like', "%{$category}%");
+            })
+            ->when(request("city"), function ($query, $city) {
+                $query->where("city", "like", "%{$city}%");
+            })
+            ->when(request("province"), function ($query, $province) {
+                $query->where("province", "like", "%{$province}%");
+            })
+            ->where('users.status', '=', '1')
+            ->orderBy('stars_points', 'desc')
+            ->orderBy('discount', 'desc')
+            ->get();
 
         return response()->json($merchants);
     }
+
 
     public function indexPending()
     {
@@ -84,7 +102,21 @@ class MerchantController extends Controller
         ];
 
         $merchants = Merchant::query()
-            ->select('merchants.id AS merchant_id', 'merchants.*', 'users.*')
+        ->select([
+            'merchants.id AS merchant_id',
+            'merchants.business_name',
+            'merchants.business_category',
+            'merchants.business_sub_category',
+            'merchants.discount',
+            'merchants.stars_points',
+            'users.id AS user_id',
+            'users.email',
+            'users.contact',
+            // Concatenate full name
+            DB::raw("CONCAT_WS(' ', COALESCE(users.fname, ''), COALESCE(users.mname, ''), COALESCE(users.lname, '')) AS merchant_name"),
+            // Concatenate full address
+            DB::raw("CONCAT_WS(', ', COALESCE(merchants.street, ''), COALESCE(merchants.city, ''), COALESCE(merchants.province, ''), COALESCE(merchants.zip, '')) AS address")
+        ])
             ->leftJoin('users', 'merchants.user_id', '=', 'users.id')
             ->when(request('query'), function ($query, $searchQuery) use ($searchFields) {
                 $query->where(function ($query) use ($searchFields, $searchQuery) {
@@ -127,7 +159,21 @@ class MerchantController extends Controller
         ];
 
         $merchants = Merchant::query()
-            ->select('merchants.id AS merchant_id', 'merchants.*', 'users.*')
+        ->select([
+            'merchants.id AS merchant_id',
+            'merchants.business_name',
+            'merchants.business_category',
+            'merchants.business_sub_category',
+            'merchants.discount',
+            'merchants.stars_points',
+            'users.id AS user_id',
+            'users.email',
+            'users.contact',
+            // Concatenate full name
+            DB::raw("CONCAT_WS(' ', COALESCE(users.fname, ''), COALESCE(users.mname, ''), COALESCE(users.lname, '')) AS merchant_name"),
+            // Concatenate full address
+            DB::raw("CONCAT_WS(', ', COALESCE(merchants.street, ''), COALESCE(merchants.city, ''), COALESCE(merchants.province, ''), COALESCE(merchants.zip, '')) AS address")
+        ])
             ->leftJoin('users', 'merchants.user_id', '=', 'users.id')
             ->when(request('query'), function ($query, $searchQuery) use ($searchFields) {
                 $query->where(function ($query) use ($searchFields, $searchQuery) {
@@ -192,78 +238,157 @@ class MerchantController extends Controller
         return $currentYear . '-0M-' . str_pad($lastSerialNumber, 7, '0', STR_PAD_LEFT);
     }
 
+    // public function store(Request $request)
+    // {
+    //     // Separate validation for Merchant
+    //     $merchantValidation = $request->validate([
+    //         'business_name' => 'required',
+    //         'business_category' => 'required',
+    //         'business_sub_category' => 'required',
+    //         'discount' => '',
+    //         'zip' => '',
+    //         'street' => '',
+    //         'city' => '',
+    //         'province' => '',
+    //         'website' => '',
+    //         'facebook' => '',
+    //     ]);
+
+
+    //     // Start a database transaction
+    //     DB::beginTransaction();
+
+    //     try {
+    //         // Validate User
+    //         $userValidation = $request->validate([
+    //             'fname' => 'required',
+    //             'lname' => 'required',
+    //             'contact' => 'required',
+    //             'email' => 'required|unique:users,email',
+    //         ]);
+
+    //         // Generate business code and card code
+    //         $businessCode = $this->generateBusinessCode($merchantValidation['business_name']);
+    //         $cardCode = $this->generateCardCode();
+
+    //         // Create User
+    //         $user = User::create([
+    //             'fname' => $userValidation['fname'],
+    //             'mname' => request('mname'),
+    //             'lname' => $userValidation['lname'],
+    //             'contact' => $userValidation['contact'],
+    //             'email' => $userValidation['email'],
+    //             'password' => bcrypt($businessCode),
+    //             'role' => 'Merchant',
+    //             'status' => 0,
+    //         ]);
+
+
+    //         // Create Merchant
+    //         Merchant::create([
+    //             'user_id' => $user->id,
+    //             'business_code' => $businessCode,
+    //             'card_code' => $cardCode,
+    //             'business_name' => $merchantValidation['business_name'],
+    //             'business_category' => $merchantValidation['business_category'],
+    //             'business_sub_category' => $merchantValidation['business_sub_category'],
+    //             'discount' => $merchantValidation['discount'],
+    //             'zip' => request('zip'),
+    //             'street' => request('street'),
+    //             'city' => request('city'),
+    //             'province' => request('province'),
+    //             'website' => $merchantValidation['business_sub_category'],
+    //             'facebook' => $merchantValidation['business_sub_category'],
+    //         ]);
+
+    //         // Commit the transaction
+    //         DB::commit();
+
+
+
+    //         return response()->json(['message' => 'success']);
+    //     } catch (\Exception $e) {
+    //         // Rollback the transaction and delete the user
+    //         DB::rollback();
+    //         if (isset($user)) {
+    //             $user->delete();
+    //         }
+    //         return response()->json(['message' => 'error', 'error' => $e->getMessage()], 500);
+    //     }
+    // }
+
     public function store(Request $request)
-    {
-        // Separate validation for Merchant
-        $merchantValidation = $request->validate([
-            'dtiNo' => 'required',
-            'business_name' => 'required',
-            'business_category' => 'required',
-            'business_sub_category' => 'required',
-            'zip' => '',
-            'street' => 'required',
-            'city' => 'required',
-            'province' => 'required',
+{
+    DB::beginTransaction();
+
+    try {
+        // Validate all input fields at once
+        $validatedData = $request->validate([
+            // User fields
+            'fname' => 'required|string|max:255',
+            'mname' => 'nullable|string|max:255',
+            'lname' => 'required|string|max:255',
+            'contact' => 'required|string|max:20',
+            'email' => 'required|email|unique:users,email',
+
+            // Merchant fields
+            'business_name' => 'required|string|max:255',
+            'business_category' => 'required|string|max:255',
+            'business_sub_category' => 'required|string|max:255',
+            'discount' => 'nullable|numeric',
+            'zip' => 'required|string|max:10',
+            'street' => 'required|string|max:255',
+            'city' => 'required|string|max:255',
+            'province' => 'required|string|max:255',
+            'website' => 'nullable|string|max:255',
+            'facebook' => 'nullable|string|max:255',
         ]);
 
-        // Start a database transaction
-        DB::beginTransaction();
+        // Generate codes
+        $businessCode = $this->generateBusinessCode($validatedData['business_name']);
+        $cardCode = $this->generateCardCode();
 
-        try {
-            // Validate User
-            $userValidation = $request->validate([
-                'fname' => 'required',
-                'lname' => 'required',
-                'contact' => 'required',
-                'email' => 'required|unique:users,email',
-            ]);
+        // Create User
+        $user = User::create([
+            'fname' => $validatedData['fname'],
+            'mname' => $validatedData['mname'] ?? null,
+            'lname' => $validatedData['lname'],
+            'contact' => $validatedData['contact'],
+            'email' => $validatedData['email'],
+            'password' => bcrypt($businessCode),
+            'role' => 'Merchant',
+            'status' => 0,
+        ]);
 
-            // Generate business code and card code
-            $businessCode = $this->generateBusinessCode($merchantValidation['business_name']);
-            $cardCode = $this->generateCardCode();
+        // Create Merchant
+        Merchant::create([
+            'user_id' => $user->id,
+            'business_code' => $businessCode,
+            'card_code' => $cardCode,
+            'business_name' => $validatedData['business_name'],
+            'business_category' => $validatedData['business_category'],
+            'business_sub_category' => $validatedData['business_sub_category'],
+            'discount' => $validatedData['discount'] ?? null,
+            'zip' => $validatedData['zip'],
+            'street' => $validatedData['street'],
+            'city' => $validatedData['city'],
+            'province' => $validatedData['province'],
+            'website' => $validatedData['website'] ?? null,
+            'facebook' => $validatedData['facebook'] ?? null,
+        ]);
 
-            // Create User
-            $user = User::create([
-                'fname' => $userValidation['fname'],
-                'mname' => request('mname'),
-                'lname' => $userValidation['lname'],
-                'contact' => $userValidation['contact'],
-                'email' => $userValidation['email'],
-                'password' => bcrypt($businessCode),
-                'role' => 'Merchant',
-                'status' => 0,
-            ]);
+        DB::commit();
 
-            // Create Merchant
-            Merchant::create([
-                'user_id' => $user->id,
-                'business_code' => $businessCode,
-                'card_code' => $cardCode,
-                'dti' => $merchantValidation['dtiNo'],
-                'business_name' => $merchantValidation['business_name'],
-                'business_category' => $merchantValidation['business_category'],
-                'business_sub_category' => $merchantValidation['business_sub_category'],
-                'zip' => request('zip'),
-                'street' => request('street'),
-                'city' => request('city'),
-                'province' => request('province'),
-            ]);
-
-            // Commit the transaction
-            DB::commit();
-
-
-
-            return response()->json(['message' => 'success']);
-        } catch (\Exception $e) {
-            // Rollback the transaction and delete the user
-            DB::rollback();
-            if (isset($user)) {
-                $user->delete();
-            }
-            return response()->json(['message' => 'error', 'error' => $e->getMessage()], 500);
+        return response()->json(['message' => 'success']);
+    } catch (\Exception $e) {
+        DB::rollback();
+        if (isset($user)) {
+            $user->delete();
         }
+        return response()->json(['message' => 'error', 'error' => $e->getMessage()], 500);
     }
+}
+
 
     public function edit(Merchant $merchant)
     {
@@ -311,7 +436,6 @@ class MerchantController extends Controller
 
             // I-update ang impormasyon ng merchant
             $merchant->update([
-                'dti' => $validate['dtiNo'],
                 'business_name' => $validate['business_name'],
                 'business_category' => $validate['business_category'],
                 'business_sub_category' => $validate['business_sub_category'],
@@ -324,12 +448,12 @@ class MerchantController extends Controller
             // Kumpirmahin ang transaksyon at i-commit ito sa database
             DB::commit();
 
-            $user = Auth::user();
-            activity()
-                ->performedOn($user)
-                ->causedBy($user)
-            ->withProperties(['role' => $user->role, 'status' => $user->status])
-                ->log('Updated Merchant');
+                // $user = Auth::user();
+                // activity()
+                //     ->performedOn($user)
+                //     ->causedBy($user)
+                // ->withProperties(['role' => $user->role, 'status' => $user->status])
+                //     ->log('Updated Merchant');
 
             return response()->json(['message' => 'success']);
         } catch (\Exception $e) {
@@ -356,12 +480,16 @@ class MerchantController extends Controller
             return response()->json(['message' => 'Merchant not found for the specified user.'], 404);
         }
 
-        // Update the user's status
-        $user->update(['status' => $status]);
+         // Retrieve email and business code
+         $email = $user->email;
+         $passowrd = $merchant->business_code;
 
-        // Retrieve email and business code
-        $email = $user->email;
-        $passowrd = $merchant->business_code;
+         $user->update([
+            'status' => $status,
+            'password' => Hash::make($merchant->business_code) // Update password securely
+        ]);
+
+
 
         // Prepare the email details
         $subject = 'Merchant Account Activation';

@@ -15,9 +15,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained();
             $table->string('card_number');
-            $table->string('product_code')->nullable();
-            $table->string('or_photo')->nullable();
             $table->string('product_price');
+            $table->string('discount');
             $table->timestamps();
         });
     }

@@ -36,7 +36,8 @@
                 <tbody v-if="filteredData.length" class="divide-y divide-gray-200">
                   <tr v-for="(item, index) in filteredData" :key="index">
                     <td v-for="(col, colIndex) in columns" :key="colIndex" class="py-3 px-4 text-sm text-gray-800">
-                      {{ item[col.key] }}
+                      <slot v-if="col.key === 'actions'" name="actions" :row="item"></slot>
+                      <span v-else>{{ item[col.key] }}</span>
                     </td>
                   </tr>
                 </tbody>
@@ -51,33 +52,33 @@
         </div>
       </div>
     </div>
-  </template>
+</template>
 
-  <script>
-  export default {
+<script>
+export default {
     props: {
-      tableData: {
-        type: Array,
-        required: true
-      },
-      columns: {
-        type: Array,
-        required: true
-      }
+        tableData: {
+            type: Array,
+            required: true
+        },
+        columns: {
+            type: Array,
+            required: true
+        }
     },
     data() {
-      return {
-        searchQuery: ''
-      };
+        return {
+            searchQuery: ''
+        };
     },
     computed: {
-      filteredData() {
-        return this.tableData.filter(item =>
-          Object.values(item).some(value =>
-            String(value).toLowerCase().includes(this.searchQuery.toLowerCase())
-          )
-        );
-      }
+        filteredData() {
+            return this.tableData.filter(item =>
+                Object.values(item).some(value =>
+                    String(value).toLowerCase().includes(this.searchQuery.toLowerCase())
+                )
+            );
+        }
     }
-  };
-  </script>
+};
+</script>

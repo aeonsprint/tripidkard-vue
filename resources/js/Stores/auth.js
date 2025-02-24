@@ -124,6 +124,7 @@ export const useAuthStore = defineStore("auth", {
             }
         },
 
+
         async handleForgotPassword(email) {
             this.authErrors = [];
             try {

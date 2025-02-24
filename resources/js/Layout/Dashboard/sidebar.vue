@@ -14,10 +14,10 @@ bg-white border-e border-gray-200 dark:bg-neutral-800 dark:border-neutral-700" r
             <div class="relative flex flex-col h-full max-h-full ">
                 <!-- Header -->
                 <header class="p-4 flex  justify-center  items-center gap-x-2">
-                        <a class="text-xl font-semibold text-black focus:outline-none focus:opacity-80 dark:text-white"
-                            href="#" aria-label="Brand">
-                            <img src="/storage/img/logo.jpg" alt="Logo" class="w-[100px] h-[65px]">
-                        </a>
+                    <a class="text-xl font-semibold text-black focus:outline-none focus:opacity-80 dark:text-white"
+                        href="#" aria-label="Brand">
+                        <img src="/storage/img/logo.jpg" alt="Logo" class="w-[100px] h-[65px]">
+                    </a>
 
 
 
@@ -59,14 +59,8 @@ bg-white border-e border-gray-200 dark:bg-neutral-800 dark:border-neutral-700" r
                                     </svg>
                                     Dashboard
 
-                                    <svg class="hs-accordion-active:block ms-auto hidden size-4 text-gray-600 group-hover:text-gray-500 dark:text-neutral-400"
-                                        xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                        stroke-linejoin="round">
-                                        <path d="m18 15-6-6-6 6" />
-                                    </svg>
 
-                                    <svg class="hs-accordion-active:hidden ms-auto block size-4 text-gray-600 group-hover:text-gray-500 dark:text-neutral-400"
+                                    <svg class=" ms-auto block size-4 text-gray-600 group-hover:text-gray-500 dark:text-neutral-400"
                                         xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                         fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                         stroke-linejoin="round">
@@ -80,7 +74,7 @@ bg-white border-e border-gray-200 dark:bg-neutral-800 dark:border-neutral-700" r
                                     <ul class="pt-1 ps-7 space-y-1">
                                         <li>
                                             <a class="flex items-center gap-x-3 py-2 px-2.5 text-sm text-gray-700 rounded-lg hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:bg-neutral-800 dark:text-neutral-400 dark:hover:text-neutral-300 dark:focus:text-neutral-300"
-                                            href="/merchant/dashboard">
+                                                href="/merchant/dashboard">
                                                 Overview
                                             </a>
                                         </li>
@@ -111,14 +105,8 @@ bg-white border-e border-gray-200 dark:bg-neutral-800 dark:border-neutral-700" r
                                     </svg>
                                     Engagements
 
-                                    <svg class="hs-accordion-active:block ms-auto hidden size-4 text-gray-600 group-hover:text-gray-500 dark:text-neutral-400"
-                                        xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                        stroke-linejoin="round">
-                                        <path d="m18 15-6-6-6 6" />
-                                    </svg>
 
-                                    <svg class="hs-accordion-active:hidden ms-auto block size-4 text-gray-600 group-hover:text-gray-500 dark:text-neutral-400"
+                                    <svg class="ms-auto block size-4 text-gray-600 group-hover:text-gray-500 dark:text-neutral-400"
                                         xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                         fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                         stroke-linejoin="round">
@@ -132,14 +120,14 @@ bg-white border-e border-gray-200 dark:bg-neutral-800 dark:border-neutral-700" r
                                     <ul class="pt-1 ps-7 space-y-1">
                                         <li>
                                             <a class="flex items-center gap-x-3 py-2 px-2.5 text-sm text-gray-700 rounded-lg hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:bg-neutral-800 dark:text-neutral-400 dark:hover:text-neutral-300 dark:focus:text-neutral-300"
-                                            href="/merchant/discount-list">
+                                                href="/merchant/discount-list">
                                                 Discounts
                                             </a>
                                         </li>
 
                                         <li>
                                             <a class="flex items-center gap-x-3 py-2 px-2.5 text-sm text-gray-700 rounded-lg hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:bg-neutral-800 dark:text-neutral-400 dark:hover:text-neutral-300 dark:focus:text-neutral-300"
-                                            href="/merchant/raffle-draw">
+                                                href="/merchant/raffle-draw">
                                                 Raffles
                                             </a>
                                         </li>
@@ -155,6 +143,128 @@ bg-white border-e border-gray-200 dark:bg-neutral-800 dark:border-neutral-700" r
                                 </div>
                             </li>
                             <!-- End Engagement -->
+
+
+                             <!-- Merchant -->
+
+                             <li class="hs-accordion" id="account-accordion">
+                                <button type="button"
+                                    class="hs-accordion-toggle w-full text-start flex items-center gap-x-3 py-2 px-2.5 text-sm text-gray-700 rounded-lg hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:bg-neutral-800 dark:text-neutral-400 dark:hs-accordion-active:text-white dark:hover:bg-neutral-700 dark:hover:text-neutral-300 dark:focus:bg-neutral-700 dark:focus:text-neutral-300"
+                                    aria-expanded="true" aria-controls="account-accordion-sub-1-collapse-1">
+                                    <svg class="size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                        stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                                        <polyline points="9 22 9 12 15 12 15 22" />
+                                    </svg>
+                                    Merchants
+
+
+                                    <svg class="ms-auto block size-4 text-gray-600 group-hover:text-gray-500 dark:text-neutral-400"
+                                        xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round">
+                                        <path d="m6 9 6 6 6-6" />
+                                    </svg>
+                                </button>
+
+                                <div id="account-accordion-sub-1-collapse-1"
+                                    class="hs-accordion-content w-full overflow-hidden transition-[height] duration-300 hidden"
+                                    role="region" aria-labelledby="account-accordion">
+                                    <ul class="pt-1 ps-7 space-y-1">
+
+                                        <li>
+                                            <a class="flex items-center gap-x-3 py-2 px-2.5 text-sm text-gray-700 rounded-lg hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:bg-neutral-800 dark:text-neutral-400 dark:hover:text-neutral-300 dark:focus:text-neutral-300"
+                                                href="/administrator/merchant/pending">
+
+                                                Merchant Pending <span
+                                                    class="ms-auto py-0.5 px-2 inline-flex items-center gap-x-1.5 text-xs bg-blue-400 text-white rounded-full dark:bg-neutral-600 dark:text-blue-400">Pro</span>
+                                            </a>
+                                        </li>
+
+                                        <li>
+                                            <a class="flex items-center gap-x-3 py-2 px-2.5 text-sm text-gray-700 rounded-lg hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:bg-neutral-800 dark:text-neutral-400 dark:hover:text-neutral-300 dark:focus:text-neutral-300"
+                                                href="/administrator/merchant/list">
+
+                                                Merchant List
+                                            </a>
+                                        </li>
+
+                                        <li>
+                                            <a class="flex items-center gap-x-3 py-2 px-2.5 text-sm text-gray-700 rounded-lg hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:bg-neutral-800 dark:text-neutral-400 dark:hover:text-neutral-300 dark:focus:text-neutral-300"
+                                                href="/administrator/merchant/archived">
+                                                 Merchant Archive
+                                            </a>
+                                        </li>
+
+
+                                    </ul>
+                                </div>
+                            </li>
+                            <!-- End Merchant -->
+
+                                                         <!-- Merchant -->
+
+                                                         <li class="hs-accordion" id="account-accordion">
+                                <button type="button"
+                                    class="hs-accordion-toggle w-full text-start flex items-center gap-x-3 py-2 px-2.5 text-sm text-gray-700 rounded-lg hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:bg-neutral-800 dark:text-neutral-400 dark:hs-accordion-active:text-white dark:hover:bg-neutral-700 dark:hover:text-neutral-300 dark:focus:bg-neutral-700 dark:focus:text-neutral-300"
+                                    aria-expanded="true" aria-controls="account-accordion-sub-1-collapse-1">
+                                    <svg class="size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                        stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                                        <polyline points="9 22 9 12 15 12 15 22" />
+                                    </svg>
+                                    Customers
+
+
+                                    <svg class="ms-auto block size-4 text-gray-600 group-hover:text-gray-500 dark:text-neutral-400"
+                                        xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round">
+                                        <path d="m6 9 6 6 6-6" />
+                                    </svg>
+                                </button>
+
+                                <div id="account-accordion-sub-1-collapse-1"
+                                    class="hs-accordion-content w-full overflow-hidden transition-[height] duration-300 hidden"
+                                    role="region" aria-labelledby="account-accordion">
+                                    <ul class="pt-1 ps-7 space-y-1">
+
+
+                                        <li>
+                                            <a class="flex items-center gap-x-3 py-2 px-2.5 text-sm text-gray-700 rounded-lg hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:bg-neutral-800 dark:text-neutral-400 dark:hover:text-neutral-300 dark:focus:text-neutral-300"
+                                                href="/administrator/merchant/list">
+
+                                                Customer List
+                                            </a>
+                                        </li>
+
+                                        <li>
+                                            <a class="flex items-center gap-x-3 py-2 px-2.5 text-sm text-gray-700 rounded-lg hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:bg-neutral-800 dark:text-neutral-400 dark:hover:text-neutral-300 dark:focus:text-neutral-300"
+                                                href="/administrator/merchant/archived">
+                                                 Customer Archive
+                                            </a>
+                                        </li>
+
+
+                                    </ul>
+                                </div>
+                            </li>
+                            <!-- End Merchant -->
+
+
+                            <li>
+                                <a class="flex items-center gap-x-3 py-2 px-2.5 text-sm text-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-300"
+                                    href="/merchant/scanner">
+                                    <svg class="size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                        stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                                        <polyline points="9 22 9 12 15 12 15 22" />
+                                    </svg>
+                                    Scanner </a>
+                            </li>
 
 
                             <li>
@@ -195,12 +305,12 @@ bg-white border-e border-gray-200 dark:bg-neutral-800 dark:border-neutral-700" r
                         <p class="text-gray-600 text-sm">
                             Get access to premium features and unlock your full potential
                         </p>
-                       <div class="mt-6">
-                        <router-link to="/merchant/plan"
-                            class="bg-blue-600 text-white mt-4 px-6 py-3 rounded-lg w-full font-semibold hover:bg-blue-700 transition">
+                        <div class="mt-6">
+                            <router-link to="/merchant/plan"
+                                class="bg-blue-600 text-white mt-4 px-6 py-3 rounded-lg w-full font-semibold hover:bg-blue-700 transition">
                                 Upgrade Plan
                             </router-link>
-                       </div>
+                        </div>
                     </div>
 
                 </div>

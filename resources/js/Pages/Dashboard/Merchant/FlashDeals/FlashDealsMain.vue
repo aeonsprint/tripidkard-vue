@@ -6,13 +6,13 @@
         <div class="p-4 sm:p-6 space-y-4 sm:space-y-6">
 
 
-            <div class="max-w-3xl mx-auto bg-white p-6 rounded-lg shadow-lg">
+            <div class="mx-auto bg-white p-6 rounded-lg shadow-lg">
     <!-- Header -->
-    <h1 class="text-2xl font-bold text-orange-500">Flash Management</h1>
+    <h1 class="text-2xl font-bold text-blue-500">Flash Management</h1>
     <p class="text-gray-500">Manage your store-wide discount and promotions</p>
 
     <!-- Discount Percentage -->
-    <div class="bg-orange-100 text-orange-600 text-3xl font-bold p-4 rounded-lg mt-4">80%</div>
+    <div class="bg-blue-100 text-blue-600 text-3xl font-bold p-4 rounded-lg mt-4">80%</div>
 
     <!-- Title Input -->
     <div class="mt-4">
@@ -48,7 +48,7 @@
     <!-- Buttons -->
     <div class="mt-6 flex justify-between">
       <button class="bg-gray-200 px-6 py-2 rounded-lg text-gray-600 hover:bg-gray-300">Delete</button>
-      <button class="bg-orange-500 text-white px-6 py-2 rounded-lg hover:bg-orange-600">Edit</button>
+      <button class="bg-orange-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600">Edit</button>
     </div>
   </div>
 

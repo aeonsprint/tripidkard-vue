@@ -32,6 +32,8 @@ class CreateCustomersTable extends Migration
             $table->string('avatar')->nullable();
             $table->tinyInteger('status');
             $table->date('validity')->nullable();
+            $table->string('role')->default('Customer');
+
             $table->timestamps();
         });
     }
