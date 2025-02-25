@@ -21,7 +21,7 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->integer('loyalty_stars')->nullable();
-            $table->enum('role', ['Admin','Merchant', 'Influencer'])->default('Merchant');
+            $table->enum('role', ['Admin','Merchant', 'Influencer', 'Customer'])->default('Merchant');
             $table->tinyInteger('status');
             $table->rememberToken();
             $table->timestamps();

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Point;
+use App\Models\User;
 use App\Models\Customer;
 use App\Mail\AccountEmail;
 use Illuminate\Http\Request;
@@ -18,10 +18,38 @@ class CustomerController extends Controller
 
     public function index()
     {
+        $searchFields = [
+            'customer_card_num',
+            'zip',
+            'street',
+            'city',
+            'province',
+            'bdate',
+            'users.fname',
+            'users.mname',
+            'users.lname',
+            'users.contact',
+            'users.email',
+        ];
 
-        $searchFields = ['customer_card_num', 'fname', 'mname', 'lname', 'contact', 'email', 'zip', 'street', 'city', 'province', 'validity'];
-        $customer = Customer::query()
-            ->where('status', 1)
+        $customers = Customer::query()
+            ->select([
+                'customers.id AS customer_id',
+                'users.id AS user_id',
+                'users.email',
+                'users.contact',
+                'customers.street',
+                'customers.bdate',
+                'customers.customer_card_num',
+                'customers.zip',
+                'customers.city',
+                '.province',
+                // Concatenate full name
+                DB::raw("CONCAT_WS(' ', COALESCE(users.fname, ''), COALESCE(users.mname, ''), COALESCE(users.lname, '')) AS customer_name"),
+                // Concatenate full address
+                DB::raw("CONCAT_WS(', ', COALESCE(customers.street, ''), COALESCE(customers.city, ''), COALESCE(customers.province, ''), COALESCE(customers.zip, '')) AS address")
+            ])
+            ->leftJoin('users', 'customers.user_id', '=', 'users.id')
             ->when(request('query'), function ($query, $searchQuery) use ($searchFields) {
                 $query->where(function ($query) use ($searchFields, $searchQuery) {
                     foreach ($searchFields as $field) {
@@ -30,18 +58,52 @@ class CustomerController extends Controller
                 });
             })
 
-            ->latest()->get();
+            ->when(request("city"), function ($query, $city) {
+                $query->where("city", "like", "%{$city}%");
+            })
+            ->when(request("province"), function ($query, $province) {
+                $query->where("province", "like", "%{$province}%");
+            })
+            ->where('users.status', '=', '1')
+            ->get();
 
-        return response()->json($customer);
-
+        return response()->json($customers);
     }
-
     public function indexArchive()
     {
 
-        $searchFields = ['customer_card_num', 'fname', 'mname', 'lname', 'contact', 'email', 'zip', 'street', 'city', 'province', 'validity'];
-        $customer = Customer::query()
-            ->where('status', 5)
+        $searchFields = [
+            'customer_card_num',
+            'zip',
+            'street',
+            'city',
+            'province',
+            'bdate',
+            'users.fname',
+            'users.mname',
+            'users.lname',
+            'users.contact',
+            'users.email',
+        ];
+
+        $customers = Customer::query()
+            ->select([
+                'customers.id AS customer_id',
+                'users.id AS user_id',
+                'users.email',
+                'users.contact',
+                'customers.street',
+                'customers.bdate',
+                'customers.customer_card_num',
+                'customers.zip',
+                'customers.city',
+                '.province',
+                // Concatenate full name
+                DB::raw("CONCAT_WS(' ', COALESCE(users.fname, ''), COALESCE(users.mname, ''), COALESCE(users.lname, '')) AS customer_name"),
+                // Concatenate full address
+                DB::raw("CONCAT_WS(', ', COALESCE(customers.street, ''), COALESCE(customers.city, ''), COALESCE(customers.province, ''), COALESCE(customers.zip, '')) AS address")
+            ])
+            ->leftJoin('users', 'customers.user_id', '=', 'users.id')
             ->when(request('query'), function ($query, $searchQuery) use ($searchFields) {
                 $query->where(function ($query) use ($searchFields, $searchQuery) {
                     foreach ($searchFields as $field) {
@@ -50,9 +112,16 @@ class CustomerController extends Controller
                 });
             })
 
-            ->latest()->get();
+            ->when(request("city"), function ($query, $city) {
+                $query->where("city", "like", "%{$city}%");
+            })
+            ->when(request("province"), function ($query, $province) {
+                $query->where("province", "like", "%{$province}%");
+            })
+            ->where('users.status', '=', '5')
+            ->get();
 
-        return response()->json($customer);
+        return response()->json($customers);
 
     }
 
@@ -153,103 +222,124 @@ class CustomerController extends Controller
     }
 
 
-    public function archive(Request $request, $id)
-    {
-        $user = Customer::findOrFail($id);
-        $status = $request->input('status');
-        $user->update(['status' => $status]);
-        return response()->json(['message' => 'Customer status updated successfully.']);
-    }
-
     public function approve(Request $request, $id)
     {
         // Find the user by ID or throw a 404 error if not found
-        $user = Customer::findOrFail($id);
+        $user = User::findOrFail($id);
 
         // Retrieve the status from the request
         $status = $request->input('status');
 
+        // Find the customer associated with the user ID
+        $customer = Customer::where('user_id', $id)->first();
+
+        // Ensure a customer is found
+        if (!$customer) {
+            return response()->json(['message' => 'Customer not found for the specified user.'], 404);
+        }
+
          // Retrieve email and business code
          $email = $user->email;
-         $passowrd = $user->customer_card_num;
+         $passowrd = $customer->customer_card_num;
 
          $user->update([
             'status' => $status,
-            'password' => Hash::make($user->customer_card_num) // Update password securely
+            'password' =>bcrypt($customer->customer_card_num) // Update password securely
         ]);
 
+
         // Prepare the email details
-        $subject = 'Merchant Account Activation';
+        $subject = 'Customer Account Activation';
         $message = $passowrd;
 
         // Send email to the user's email address
         Mail::to($email)->send(new AccountEmail($message, $subject, $email));
 
         // Return a JSON response confirming success
-        return response()->json(['message' => 'Customer status updated and email sent successfully.']);
+        return response()->json(['message' => 'Merchant status updated and email sent successfully.']);
+    }
+
+
+    public function archive(Request $request, $id)
+    {
+        $user = User::findOrFail($id);
+        $status = $request->input('status');
+        $user->update(['status' => $status]);
+        return response()->json(['message' => 'Merchant status updated successfully.']);
+    }
+
+    public function generateCardCode()
+    {
+        $currentYear = date('Y');
+        $lastCardCode = Customer::where('customer_card_num', 'like', $currentYear . '-%')->latest('customer_card_num')->value(column: 'customer_card_num');
+        $lastSerialNumber = 1;
+        if ($lastCardCode) {
+            $lastSerialNumber = intval(substr($lastCardCode, -7)) + 1;
+        }
+        return $currentYear . '-0C-' . str_pad($lastSerialNumber, 7, '0', STR_PAD_LEFT);
     }
 
     public function store(Request $request)
     {
-        // $user = auth()->user();
 
-        $validated = $request->validate([
-            'customer_card_num' => 'required',
-            'fname' => 'required',
-            'lname' => 'required',
-            'contact' => 'required',
-            'email' => 'required|unique:users,email',
-        ]);
+        DB::beginTransaction();
 
-        // Check if customer_card_num exists in CardCodes with status 0
-        $cardCode = CardCode::where('card_number', $validated['customer_card_num'])
-            ->where('status', 0)
-            ->first();
+        try {
+            // Validate all input fields at once
+            $validatedData = $request->validate([
+                // User fields
+                'fname' => 'required|string|max:255',
+                'mname' => 'nullable|string|max:255',
+                'lname' => 'required|string|max:255',
+                'contact' => 'required|string|max:20',
+                'email' => 'required|email|unique:users,email',
 
-        // If no card code found or status is not 0, return error
-        if (!$cardCode) {
-            return response()->json(['error' => 'The provided card number is not registered or is invalid.'], 400);
+                // Merchant fields
+                'bdate' => '',
+                'zip' => 'required|string|max:10',
+                'street' => 'required|string|max:255',
+                'city' => 'required|string|max:255',
+                'province' => 'required|string|max:255',
+            ]);
+
+            // Generate codes
+            $cardNumber = $this->generateCardCode();
+            $validityDate = now()->addMonths(15); // 15 months = 1 year and 3 months
+            // Create User
+            $user = User::create([
+                'fname' => $validatedData['fname'],
+                'mname' => $validatedData['mname'] ?? null,
+                'lname' => $validatedData['lname'],
+                'contact' => $validatedData['contact'],
+                'email' => $validatedData['email'],
+                'password' => bcrypt($cardNumber),
+                'role' => 'Customer',
+                'status' => 1,
+            ]);
+
+            // Create Merchant
+            Customer::create([
+                'user_id' => $user->id,
+                'customer_card_num' => $cardNumber,
+                'bdate' => $validatedData['bdate'],
+                'street' => $validatedData['street'],
+                'city' => $validatedData['city'],
+                'province' => $validatedData['province'],
+                'validity' => $validityDate,
+            ]);
+
+            DB::commit();
+
+            return response()->json(['message' => 'success']);
+        } catch (\Exception $e) {
+            DB::rollback();
+            if (isset($user)) {
+                $user->delete();
+            }
+            return response()->json(['message' => 'error', 'error' => $e->getMessage()], 500);
         }
 
-        // Calculate the validity date (1 year and 3 months from now)
-        $validityDate = now()->addMonths(15); // 15 months = 1 year and 3 months
 
-        // Create the customer
-        Customer::create([
-            'customer_card_num' => $validated['customer_card_num'],
-            'fname' => $validated['fname'],
-            'mname' => $request->input('mname'),
-            'lname' => $validated['lname'],
-            'contact' => $validated['contact'],
-            'bdate' => $request->input('bdate'),
-            'email' => $validated['email'],
-            'zip' => $request->input('zip'),
-            'street' => $request->input('street'),
-            'city' => $request->input('city'),
-            'province' => $request->input('province'),
-            'status' => 1,
-            'validity' => $validityDate,
-        ]);
-
-        // Update the card code status to 1
-        $cardCode->update(['status' => 1, 'validity' => $validityDate,]);
-
-        $user = Auth::user();
-        // $name = $user->role === 'Merchant'
-        // ? $user->business_name
-        // : ($user->role === 'Influencer'
-        //     ? $user->blog_name
-        //     : trim($user->fname . ' ' . $user->mname . ' ' . $user->lname));
-
-            activity()
-            ->causedBy($user)
-            ->withProperties(['role' => $user->role, 'status' => $user->status])
-            ->log("Customer added successfully");
-
-
-
-
-        return response()->json(['success' => 'Customer added successfully']);
     }
 
 

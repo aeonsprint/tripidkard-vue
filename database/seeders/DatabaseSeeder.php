@@ -19,7 +19,7 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             MerchantSeeder::class,
             CardCodeSeeder::class,
-            CustomerSeeder::class,
+            // CustomerSeeder::class,
             LocationSeeder::class,
             InfluencerSeeder::class,
         ]);

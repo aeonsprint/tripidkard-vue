@@ -2,12 +2,8 @@
     <div class="mt-4 relative max-w-[68rem] mx-auto">
         <div class="overflow-x-auto pb-3 scrollbar-hide">
             <div class="flex space-x-5 px-4 min-w-max">
-                <button
-                    v-for="category in categories"
-                    :key="category.name"
-                    @click="selectCategory(category.name)"
-                    class="flex items-center space-x-2 px-4 py-2 rounded-lg text-blue-500 bg-blue-100 hover:bg-blue-200 transition flex-shrink-0"
-                >
+                <button v-for="category in categories" :key="category.name" @click="selectCategory(category.name)"
+                    class="flex items-center space-x-2 px-4 py-2 rounded-lg text-blue-500 bg-blue-100 hover:bg-blue-200 transition flex-shrink-0">
                     <component :is="category.icon" class="w-5 h-5 flex-shrink-0" />
                     <span class="whitespace-nowrap">{{ category.name }}</span>
                 </button>
@@ -38,7 +34,9 @@ const categories = [
 
 // Navigate to merchant list with selected category as query param
 const selectCategory = (category) => {
-    router.push({ path: "/merchant/list", query: { category } });
+    router.push({ path: "/merchant/list", query: { category } }).then(() => {
+        window.location.reload(); // Force reload to apply query changes
+    });
 };
 </script>
 
@@ -50,7 +48,9 @@ const selectCategory = (category) => {
 
 /* Hide scrollbar for IE, Edge and Firefox */
 .scrollbar-hide {
-    -ms-overflow-style: none;  /* IE and Edge */
-    scrollbar-width: none;  /* Firefox */
+    -ms-overflow-style: none;
+    /* IE and Edge */
+    scrollbar-width: none;
+    /* Firefox */
 }
 </style>

@@ -93,6 +93,8 @@ const handleSubmit = async () => {
             } else {
                 router.push('/');
             }
+            window.location.reload(); // Reload after redirect
+
         }
     } catch (error) {
         errors.general = 'An unexpected error occurred. Please try again.';
@@ -103,12 +105,6 @@ const handleSubmit = async () => {
 
 onMounted(() => {
     authStore.getUser();
-    // Check for mobile or tablet screen
-    // const checkDevice = () => {
-    //     isMobileOrTablet.value = window.innerWidth <= 768;
-    // };
-    // checkDevice();
-    // window.addEventListener('resize', checkDevice);
 });
 </script>
 

@@ -522,7 +522,7 @@ public function edit($id)
 
          $user->update([
             'status' => $status,
-            'password' => Hash::make($merchant->business_code) // Update password securely
+            'password' =>bcrypt($merchant->business_code) // Update password securely
         ]);
 
 

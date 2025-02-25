@@ -203,7 +203,7 @@ bg-white border-e border-gray-200 dark:bg-neutral-800 dark:border-neutral-700" r
 
                                         <li>
                                             <a class="flex items-center gap-x-3 py-2 px-2.5 text-sm text-gray-700 rounded-lg hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:bg-neutral-800 dark:text-neutral-400 dark:hover:text-neutral-300 dark:focus:text-neutral-300"
-                                                href="/administrator/merchant/archived">
+                                                href="/administrator/customer/archived">
                                                 Customer Archive
                                             </a>
                                         </li>
@@ -277,22 +277,4 @@ bg-white border-e border-gray-200 dark:bg-neutral-800 dark:border-neutral-700" r
     </body>
 </template>
 
-<script>
-import { useAuthStore } from "@/stores/auth";
-import { onMounted } from "vue";
 
-export default {
-    setup() {
-        const authStore = useAuthStore();
-
-        onMounted(() => {
-            if (authStore.authUser) {
-        userData.value = { ...authStore.authUser };
-    }
-        });
-        return {
-            authStore
-        }
-    }
-}
-</script>

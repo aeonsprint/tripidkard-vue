@@ -14,7 +14,7 @@
 
                 <!-- Add Customer Button -->
                 <div class="mt-4">
-                    <router-link to="/customer/add"
+                    <router-link to="/administrator/customer/register"
                         class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
                         + Add Customer
                     </router-link>
@@ -32,7 +32,7 @@
                         </button>
 
                         <!-- Archive Button with Icon -->
-                        <button @click="confirmArchive(row.id)"
+                        <button @click="confirmArchive(row.user_id)"
                             class="flex items-center text-red-600 hover:text-red-800 bg-transparent border-2 border-red-600 px-4 py-2 rounded-lg ms-2">
                             <i class="fas fa-archive mr-2"></i> Archive
                         </button>
@@ -61,7 +61,7 @@ export default {
             CustomerCount: 0,
             columns: [
                 { label: 'Card Number', key: 'customer_card_num' },
-                { label: 'Customer Name', key: 'fullname' },
+                { label: 'Customer Name', key: 'customer_name' },
                 { label: 'Contact No.', key: 'contact' },
                 { label: 'Email Address', key: 'email' },
                 { label: 'Address', key: 'address' },
@@ -77,17 +77,8 @@ export default {
                 console.log("API Response:", response.data); // 🔍 Log API response
 
                 if (Array.isArray(response.data)) {
-                    this.tableData = response.data.map(customer => ({
-                        ...customer,
-                        fullname: `${customer.fname ?? ''} ${customer.mname ?? ''} ${customer.lname ?? ''}`.trim(), // Remove extra spaces
-                        address: `${customer.street ?? ''}, ${customer.city ?? ''}, ${customer.province ?? ''}, ${customer.zip ?? ''}`
-                            .replace(/^, |, ,/g, '') // Remove leading commas if empty values
-                            .trim() // Remove extra spaces
-                    }));
-
-                    console.log("Transformed Data:", this.tableData); // 🔍 Log transformed data
-
-                    this.CustomerCount = response.data.length;
+                    this.tableData = response.data;
+                    this.merchantCount = response.data.length;
                 } else {
                     console.error('Invalid data format:', response.data);
                 }

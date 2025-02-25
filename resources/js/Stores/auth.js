@@ -114,11 +114,14 @@ export const useAuthStore = defineStore("auth", {
         },
 
         async logout() {
-            const router = useRouter(); // Dapat nasa loob ng function ang useRouter()
-            this.authUser = null;
-            await axios.post("/logout");
-            localStorage.removeItem("authUser");
-            router.push("/login"); // Redirect sa login page
+            await this.getToken();
+            try {
+                await axios.post("/logout");
+                this.authUser = null;
+                localStorage.removeItem("authUser");
+            } catch (error) {
+                console.error("Error logging out:", error);
+            }
         },
 
 

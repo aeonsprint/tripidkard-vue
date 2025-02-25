@@ -9,7 +9,7 @@
 
                 <!-- Total Customer -->
                 <div class="bg-blue-100 text-blue-600 text-3xl font-bold p-4 rounded-lg mt-4">
-                    {{ CuatomerCount }} Archived Cuatomers
+                    {{ customerCount }} Archived Cuatomers
                 </div>
 
                 <!-- Add Customer Button -->
@@ -54,12 +54,12 @@ export default {
         return {
             CuatomerCount: 0,
             columns: [
-                { label: 'Card Number', key: 'customer_card_num' },
-                { label: 'Customer Name', key: 'fullname' },
+            { label: 'Card Number', key: 'customer_card_num' },
+                { label: 'Customer Name', key: 'customer_name' },
                 { label: 'Contact No.', key: 'contact' },
                 { label: 'Email Address', key: 'email' },
                 { label: 'Address', key: 'address' },
-                { label: 'Actions', key: 'actions' } // Approve button lang ang nasa actions
+                { label: 'Actions', key: 'actions' } // Added Actions Column
             ],
             tableData: [],
         };
@@ -70,18 +70,10 @@ export default {
                 const response = await axios.get('/api/customers/archive'); // 🌟 Updated API endpoint
                 console.log("API Response:", response.data); // 🔍 Log API response
 
+
                 if (Array.isArray(response.data)) {
-                    this.tableData = response.data.map(customer => ({
-                        ...customer,
-                        fullname: `${customer.fname ?? ''} ${customer.mname ?? ''} ${customer.lname ?? ''}`.trim(), // Remove extra spaces
-                        address: `${customer.street ?? ''}, ${customer.city ?? ''}, ${customer.province ?? ''}, ${customer.zip ?? ''}`
-                            .replace(/^, |, ,/g, '') // Remove leading commas if empty values
-                            .trim() // Remove extra spaces
-                    }));
-
-                    console.log("Transformed Data:", this.tableData); // 🔍 Log transformed data
-
-                    this.CuatomerCount = response.data.length;
+                    this.tableData = response.data;
+                    this.customerCount = response.data.length;
                 } else {
                     console.error('Invalid data format:', response.data);
                 }
