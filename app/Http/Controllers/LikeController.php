@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Count;
+use App\Models\Like;
 use Illuminate\Http\Request;
 
-class CountController extends Controller
+class LikeController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -34,7 +34,7 @@ class CountController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Count $count)
+    public function show(Like $like)
     {
         //
     }
@@ -42,7 +42,7 @@ class CountController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Count $count)
+    public function edit(Like $like)
     {
         //
     }
@@ -50,7 +50,7 @@ class CountController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Count $count)
+    public function update(Request $request, Like $like)
     {
         //
     }
@@ -58,7 +58,7 @@ class CountController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Count $count)
+    public function destroy(Like $like)
     {
         //
     }

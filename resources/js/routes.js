@@ -6,6 +6,7 @@ import MerchantArchive from "./Pages/Dashboard/Admin/Merchant/MerchantArchive.vu
 import CustomerList from "./Pages/Dashboard/Admin/Customer/CustomerList.vue";
 import CustomerArchive from "./Pages/Dashboard/Admin/Customer/CustomerArchive.vue";
 import MerchantRegister from "./Pages/Dashboard/Admin/Merchant/Register.vue";
+import CustomerRegister from "./Pages/Dashboard/Admin/Customer/Register.vue";
 
 import AdminProfile from "./Pages/Dashboard/Admin/ProfileList.vue";
 import AdminDiscount from "./Pages/Dashboard/Admin/DiscountList.vue";
@@ -27,6 +28,8 @@ import MerchantDiscount from "./Pages/Dashboard/Merchant/Discount/DiscountList.v
 import MerchantDiscountRegister from "./Pages/Dashboard/Merchant/Discount/DiscountRegister.vue";
 import MerchantAnalytics from "./Pages/Dashboard/Merchant/Analytics.vue";
 import MerchantRaffle from "./Pages/Dashboard/Merchant/Raffle/RaffleList.vue";
+import MerchantRaffleCreate from "./Pages/Dashboard/Merchant/Raffle/AddRaffle.vue";
+import MerchantRaffleRegister from "./Pages/Dashboard/Merchant/Raffle/RaffleRegister.vue";
 import MerchantDeals from "./Pages/Dashboard/Merchant/FlashDeals/FlashDealsMain.vue";
 import MerchantLogs from "./Pages/Dashboard/Merchant/ActivityLog.vue";
 import MerchantBilling from "./Pages/Dashboard/Merchant/Billing.vue";
@@ -48,6 +51,8 @@ import Index from "./Pages/Home/HomeList.vue";
 import About from "./Pages/About/AboutUsList.vue";
 import Tripidkard from "./Pages/Tripidkard/TripidkardList.vue";
 import MerchantPage from "./Pages/Merchant/Pages.vue";
+import MerchantPageList from "./Pages/Merchant/List.vue";
+import MerchantPageResult from "./Pages/Merchant/MerchantResult.vue";
 import JoinRaffle from "./Pages/Merchant/Raffle.vue";
 import RaffleDetails from "./Pages/Merchant/RaffleDetails.vue";
 import MerchantCenter from "./Pages/Merchant/Center.vue";
@@ -136,7 +141,7 @@ const routesAdmin = [
     {
         path: "/administrator/customer/register",
         name: "administrator.customer.register",
-        component: MerchantRegister,
+        component: CustomerRegister,
         meta: {
             title: "Customer Register",
             breadcrumb: "administrator/customer/register",
@@ -371,11 +376,27 @@ const routesMerchant = [
         meta: { title: "Data Analytics", breadcrumb: "merchant/analytics" },
         requiresMerchantAuth: true,
     },
+
     {
         path: "/merchant/raffle-draw/",
         name: "merchant.raffle-draw",
         component: MerchantRaffle,
         meta: { title: "Raffle Draw", breadcrumb: "merchant/raffle-draw" },
+        requiresMerchantAuth: true,
+    },
+    {
+        path: "/merchant/raffle/create",
+        name: "merchant.raffle.create",
+        component: MerchantRaffleCreate,
+        meta: { title: "Raffle Create", breadcrumb: "merchant/raffle/create" },
+        requiresMerchantAuth: true,
+    },
+
+    {
+        path: "/merchant/raffle/register",
+        name: "merchant.raffle.register",
+        component: MerchantRaffleRegister,
+        meta: { title: "Raffle Register", breadcrumb: "merchant/raffle/register" },
         requiresMerchantAuth: true,
     },
     {
@@ -429,12 +450,7 @@ const routesDefault = [
         meta: { title: "Home", requiresGuest: true },
     },
 
-    {
-        path: "/merchant/page",
-        name: "merchant.page",
-        component: Index,
-        meta: { title: "Home", requiresGuest: true },
-    },
+
 
     {
         path: "/about-us",
@@ -449,7 +465,7 @@ const routesDefault = [
         meta: { title: "Tripidkard", requiresGuest: true },
     },
     {
-        path: "/merchant/page",
+        path: "/merchant/page/:merchant_id",
         name: "merchant.page",
         component: MerchantPage,
         meta: {
@@ -457,6 +473,22 @@ const routesDefault = [
             breadcrumb: "Home/Merchant/Page",
             requiresGuest: true,
         },
+    },
+
+
+
+    {
+        path: "/merchant/list",
+        name: "merchant.list",
+        component: MerchantPageList,
+        meta: { title: "Home", requiresGuest: true },
+    },
+
+    {
+        path: "/merchant/result",
+        name: "merchant.result",
+        component: MerchantPageResult,
+        meta: { title: "Home", requiresGuest: true },
     },
     {
         path: "/join/raffle",
@@ -468,13 +500,15 @@ const routesDefault = [
             requiresGuest: true,
         },
     },
+
+
     {
         path: "/raffle/details",
         name: "raffle.details",
         component: RaffleDetails,
         meta: {
             title: "Merchant Page",
-            breadcrumb: "Home/Merchant/Page",
+            breadcrumb: "Home/raffle/details",
             requiresGuest: true,
         },
     },

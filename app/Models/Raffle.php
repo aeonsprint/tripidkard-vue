@@ -6,5 +6,5 @@ use Illuminate\Database\Eloquent\Model;
 
 class Raffle extends Model
 {
-    //
+    protected $guarded = [];
 }

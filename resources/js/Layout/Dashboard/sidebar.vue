@@ -51,21 +51,11 @@ bg-white border-e border-gray-200 dark:bg-neutral-800 dark:border-neutral-700" r
                                 <button type="button"
                                     class="hs-accordion-toggle w-full text-start flex items-center gap-x-3 py-2 px-2.5 text-sm text-gray-700 rounded-lg hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:bg-neutral-800 dark:text-neutral-400 dark:hs-accordion-active:text-white dark:hover:bg-neutral-700 dark:hover:text-neutral-300 dark:focus:bg-neutral-700 dark:focus:text-neutral-300"
                                     aria-expanded="true" aria-controls="account-accordion-sub-1-collapse-1">
-                                    <svg class="size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                        stroke-linecap="round" stroke-linejoin="round">
-                                        <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
-                                        <polyline points="9 22 9 12 15 12 15 22" />
-                                    </svg>
+                                    <span class="material-icons  material-symbols-outlined ">home</span>
                                     Dashboard
 
-
-                                    <svg class=" ms-auto block size-4 text-gray-600 group-hover:text-gray-500 dark:text-neutral-400"
-                                        xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                        stroke-linejoin="round">
-                                        <path d="m6 9 6 6 6-6" />
-                                    </svg>
+                                    <span
+                                        class="material-icons material-symbols-outlined ms-auto  text-gray-600 group-hover:text-gray-500 dark:text-neutral-400">keyboard_arrow_right</span>
                                 </button>
 
                                 <div id="account-accordion-sub-1-collapse-1"
@@ -97,21 +87,11 @@ bg-white border-e border-gray-200 dark:bg-neutral-800 dark:border-neutral-700" r
                                 <button type="button"
                                     class="hs-accordion-toggle w-full text-start flex items-center gap-x-3 py-2 px-2.5 text-sm text-gray-700 rounded-lg hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:bg-neutral-800 dark:text-neutral-400 dark:hs-accordion-active:text-white dark:hover:bg-neutral-700 dark:hover:text-neutral-300 dark:focus:bg-neutral-700 dark:focus:text-neutral-300"
                                     aria-expanded="true" aria-controls="account-accordion-sub-1-collapse-1">
-                                    <svg class="size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                        stroke-linecap="round" stroke-linejoin="round">
-                                        <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
-                                        <polyline points="9 22 9 12 15 12 15 22" />
-                                    </svg>
+                                    <span class="material-icons  material-symbols-outlined ">bento</span>
+
                                     Engagements
-
-
-                                    <svg class="ms-auto block size-4 text-gray-600 group-hover:text-gray-500 dark:text-neutral-400"
-                                        xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                        stroke-linejoin="round">
-                                        <path d="m6 9 6 6 6-6" />
-                                    </svg>
+                                    <span
+                                        class="material-icons material-symbols-outlined ms-auto  text-gray-600 group-hover:text-gray-500 dark:text-neutral-400">keyboard_arrow_right</span>
                                 </button>
 
                                 <div id="account-accordion-sub-1-collapse-1"
@@ -145,27 +125,18 @@ bg-white border-e border-gray-200 dark:bg-neutral-800 dark:border-neutral-700" r
                             <!-- End Engagement -->
 
 
-                             <!-- Merchant -->
+                            <!-- Merchant -->
 
-                             <li class="hs-accordion" id="account-accordion">
+                            <li class="hs-accordion" id="account-accordion">
                                 <button type="button"
                                     class="hs-accordion-toggle w-full text-start flex items-center gap-x-3 py-2 px-2.5 text-sm text-gray-700 rounded-lg hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:bg-neutral-800 dark:text-neutral-400 dark:hs-accordion-active:text-white dark:hover:bg-neutral-700 dark:hover:text-neutral-300 dark:focus:bg-neutral-700 dark:focus:text-neutral-300"
                                     aria-expanded="true" aria-controls="account-accordion-sub-1-collapse-1">
-                                    <svg class="size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                        stroke-linecap="round" stroke-linejoin="round">
-                                        <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
-                                        <polyline points="9 22 9 12 15 12 15 22" />
-                                    </svg>
+                                    <span class="material-icons  material-symbols-outlined ">group</span>
+
                                     Merchants
+                                    <span
+                                        class="material-icons material-symbols-outlined ms-auto  text-gray-600 group-hover:text-gray-500 dark:text-neutral-400">keyboard_arrow_right</span>
 
-
-                                    <svg class="ms-auto block size-4 text-gray-600 group-hover:text-gray-500 dark:text-neutral-400"
-                                        xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                        stroke-linejoin="round">
-                                        <path d="m6 9 6 6 6-6" />
-                                    </svg>
                                 </button>
 
                                 <div id="account-accordion-sub-1-collapse-1"
@@ -193,7 +164,7 @@ bg-white border-e border-gray-200 dark:bg-neutral-800 dark:border-neutral-700" r
                                         <li>
                                             <a class="flex items-center gap-x-3 py-2 px-2.5 text-sm text-gray-700 rounded-lg hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:bg-neutral-800 dark:text-neutral-400 dark:hover:text-neutral-300 dark:focus:text-neutral-300"
                                                 href="/administrator/merchant/archived">
-                                                 Merchant Archive
+                                                Merchant Archive
                                             </a>
                                         </li>
 
@@ -203,27 +174,17 @@ bg-white border-e border-gray-200 dark:bg-neutral-800 dark:border-neutral-700" r
                             </li>
                             <!-- End Merchant -->
 
-                                                         <!-- Merchant -->
+                            <!-- Merchant -->
 
-                                                         <li class="hs-accordion" id="account-accordion">
+                            <li class="hs-accordion" id="account-accordion">
                                 <button type="button"
                                     class="hs-accordion-toggle w-full text-start flex items-center gap-x-3 py-2 px-2.5 text-sm text-gray-700 rounded-lg hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:bg-neutral-800 dark:text-neutral-400 dark:hs-accordion-active:text-white dark:hover:bg-neutral-700 dark:hover:text-neutral-300 dark:focus:bg-neutral-700 dark:focus:text-neutral-300"
                                     aria-expanded="true" aria-controls="account-accordion-sub-1-collapse-1">
-                                    <svg class="size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                        stroke-linecap="round" stroke-linejoin="round">
-                                        <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
-                                        <polyline points="9 22 9 12 15 12 15 22" />
-                                    </svg>
+                                    <span class="material-icons  material-symbols-outlined ">group</span>
+
                                     Customers
-
-
-                                    <svg class="ms-auto block size-4 text-gray-600 group-hover:text-gray-500 dark:text-neutral-400"
-                                        xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                        stroke-linejoin="round">
-                                        <path d="m6 9 6 6 6-6" />
-                                    </svg>
+                                    <span
+                                        class="material-icons material-symbols-outlined ms-auto  text-gray-600 group-hover:text-gray-500 dark:text-neutral-400">keyboard_arrow_right</span>
                                 </button>
 
                                 <div id="account-accordion-sub-1-collapse-1"
@@ -234,7 +195,7 @@ bg-white border-e border-gray-200 dark:bg-neutral-800 dark:border-neutral-700" r
 
                                         <li>
                                             <a class="flex items-center gap-x-3 py-2 px-2.5 text-sm text-gray-700 rounded-lg hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:bg-neutral-800 dark:text-neutral-400 dark:hover:text-neutral-300 dark:focus:text-neutral-300"
-                                                href="/administrator/merchant/list">
+                                                href="/administrator/customer/list">
 
                                                 Customer List
                                             </a>
@@ -243,7 +204,7 @@ bg-white border-e border-gray-200 dark:bg-neutral-800 dark:border-neutral-700" r
                                         <li>
                                             <a class="flex items-center gap-x-3 py-2 px-2.5 text-sm text-gray-700 rounded-lg hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:bg-neutral-800 dark:text-neutral-400 dark:hover:text-neutral-300 dark:focus:text-neutral-300"
                                                 href="/administrator/merchant/archived">
-                                                 Customer Archive
+                                                Customer Archive
                                             </a>
                                         </li>
 
@@ -257,12 +218,8 @@ bg-white border-e border-gray-200 dark:bg-neutral-800 dark:border-neutral-700" r
                             <li>
                                 <a class="flex items-center gap-x-3 py-2 px-2.5 text-sm text-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-300"
                                     href="/merchant/scanner">
-                                    <svg class="size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                        stroke-linecap="round" stroke-linejoin="round">
-                                        <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
-                                        <polyline points="9 22 9 12 15 12 15 22" />
-                                    </svg>
+                                    <span class="material-icons  material-symbols-outlined ">qr_code_scanner</span>
+
                                     Scanner </a>
                             </li>
 
@@ -270,23 +227,19 @@ bg-white border-e border-gray-200 dark:bg-neutral-800 dark:border-neutral-700" r
                             <li>
                                 <a class="flex items-center gap-x-3 py-2 px-2.5 text-sm text-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-300"
                                     href="/merchant/activity-log">
-                                    <svg class="size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                        stroke-linecap="round" stroke-linejoin="round">
-                                        <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
-                                        <polyline points="9 22 9 12 15 12 15 22" />
-                                    </svg>
+                                    <span class="material-icons material-symbols-outlined">
+                                        rowing
+                                    </span>
+
                                     Activity Log </a>
                             </li>
                             <li>
                                 <a class="flex items-center gap-x-3 py-2 px-2.5 text-sm text-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-300"
                                     href="/merchant/billing">
-                                    <svg class="size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                        stroke-linecap="round" stroke-linejoin="round">
-                                        <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
-                                        <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
-                                    </svg>
+                                    <span class="material-icons  material-symbols-outlined ">
+                                        receipt_long
+                                    </span>
+
                                     Billing
                                 </a>
                             </li>
@@ -323,3 +276,23 @@ bg-white border-e border-gray-200 dark:bg-neutral-800 dark:border-neutral-700" r
         <!-- End Content -->
     </body>
 </template>
+
+<script>
+import { useAuthStore } from "@/stores/auth";
+import { onMounted } from "vue";
+
+export default {
+    setup() {
+        const authStore = useAuthStore();
+
+        onMounted(() => {
+            if (authStore.authUser) {
+        userData.value = { ...authStore.authUser };
+    }
+        });
+        return {
+            authStore
+        }
+    }
+}
+</script>

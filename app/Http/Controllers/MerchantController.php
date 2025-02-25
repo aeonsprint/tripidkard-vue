@@ -26,6 +26,7 @@ class MerchantController extends Controller
             'street',
             'city',
             'province',
+            'discount',
             'stars_points',
             'users.fname',
             'users.mname',
@@ -47,6 +48,7 @@ class MerchantController extends Controller
                 'users.id AS user_id',
                 'users.email',
                 'users.contact',
+                'merchants.discount',
                 'merchants.city',
                 'merchants.province',
                 // Concatenate full name
@@ -64,6 +66,9 @@ class MerchantController extends Controller
             })
             ->when(request('category'), function ($query, $category) {
                 $query->where('business_category', 'like', "%{$category}%");
+            })
+            ->when(request('discount'), function ($query, $discount) {
+                $query->where('discount', '=', $discount);
             })
             ->when(request("city"), function ($query, $city) {
                 $query->where("city", "like", "%{$city}%");
@@ -191,6 +196,27 @@ class MerchantController extends Controller
         return response()->json($merchants);
 
     }
+
+
+    public function searchLocations()
+{
+    $cities = Merchant::select('city')
+        ->whereNotNull('city')
+        ->distinct()
+        ->orderBy('city')
+        ->pluck('city');
+
+    $provinces = Merchant::select('province')
+        ->whereNotNull('province')
+        ->distinct()
+        ->orderBy('province')
+        ->pluck('province');
+
+    return response()->json([
+        'cities' => $cities,
+        'provinces' => $provinces
+    ]);
+}
 
 
 
@@ -389,16 +415,26 @@ class MerchantController extends Controller
     }
 }
 
+public function incrementViews($id)
+{
+    $merchant = Merchant::find($id);
+    if ($merchant) {
+        $merchant->increment('views'); // +1 sa views column
 
-    public function edit(Merchant $merchant)
-    {
-
-        // Kunin ang merchant kasama ang impormasyon ng user
-        $merchantWithUser = Merchant::with('user:id,fname,mname,lname,contact,email,avatar')
-            ->findOrFail($merchant->id);
-
-        return $merchantWithUser;
+        return response()->json(['message' => 'View count updated']);
     }
+    return response()->json(['message' => 'Merchant not found'], 404);
+}
+
+public function edit($id)
+{
+    // Hanapin ang merchant kasama ang user info
+    $merchantWithUser = Merchant::with('user:id,fname,mname,lname,contact,email,avatar')
+        ->findOrFail($id);
+
+    return response()->json($merchantWithUser);
+}
+
 
     public function update(Request $request, Merchant $merchant)
     {

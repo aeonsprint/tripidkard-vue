@@ -3,6 +3,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\EmailController;
 use App\Http\Controllers\QrcodeController;
+use App\Http\Controllers\RaffleController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CardCodeController;
 use App\Http\Controllers\CustomerController;
@@ -66,12 +67,15 @@ Route::get('/api/merchant/discounts', [DiscountController::class,'index']);
 
 // User Profile
 Route::get('/api/profile', [ProfileController::class, 'index']);
-Route::post('/api/user/update-profile', [ProfileController::class, 'uploadImage']);
-Route::post('/api/upload-profile-image', [ProfileController::class, 'uploadImage']);
-Route::post('/api/profile/upload-background-image', [ProfileController::class, 'uploadBackground']);
-Route::put('/api/profile-information/edit', [ProfileController::class,'updateProfile']);
-Route::put('/api/profile-business/edit', [ProfileController::class,'updateBusiness']);
-Route::put('/api/profile-password/change', [ProfileController::class,'changePassword']);
+Route::put('/api/user/update-profile', [ProfileController::class, 'updateProfile']);
+Route::put('/api/user/update-discount', [ProfileController::class, 'updateDiscount']);
+Route::put('/api/user/update-address', [ProfileController::class, 'updateAddress']);
+Route::put('/api/user/update-password', [ProfileController::class,'updatePassword']);
+// Route::post('/api/user/update-profile', [ProfileController::class, 'uploadImage']);
+Route::post('/api/user/upload-logo', [ProfileController::class, 'uploadlogo']);
+Route::post('/api/user/upload-background', [ProfileController::class, 'uploadBackground']);
+// Route::put('/api/profile-information/edit', [ProfileController::class,'updateProfile']);
+// Route::put('/api/profile-business/edit', [ProfileController::class,'updateBusiness']);
 
 
 // Tripidkard Route
@@ -88,26 +92,17 @@ Route::get('/api/merchants-pending', [MerchantController::class, 'indexPending']
 Route::get('/api/merchants-archive', [MerchantController::class, 'indexArchive']);
 Route::post('/api/merchants/create', [MerchantController::class, 'store']);
 Route::put('/api/merchants/{id}', [MerchantController::class, 'archive']);
-Route::get('/api/merchants/{merchant}/edit', [MerchantController::class, 'edit']);
+Route::get('/api/merchants/{id}/edit', [MerchantController::class, 'edit']);
 Route::put('/api/merchants/{merchant}/update', [MerchantController::class, 'update']);
 Route::patch('/api/merchant/{id}/status/approve', [MerchantController::class, 'approve']);
 Route::patch('/api/merchant/{id}/status/archive', [MerchantController::class, 'archive']);
 
+Route::post('/api/merchant/{id}/increment-views ', [MerchantController::class, 'incrementViews']);
+Route::get('/api/merchants/locations', [MerchantController::class, 'searchLocations']);
+
+
 Route::get('/api/merchants/count', [MerchantController::class, 'count']);
 
-
-// Influencer Route
-// Route::get('/api/influencers', [InfluencerController::class, 'index']);
-// Route::get('/api/influencers-pending', [InfluencerController::class, 'indexPending']);
-// Route::get('/api/influencers-archive', [InfluencerController::class, 'indexArchive']);
-// Route::post('/api/influencers/create', [InfluencerController::class, 'store']);
-// Route::get('/api/influencers/{influencer}/edit', [InfluencerController::class, 'edit']);
-// Route::post('/api/influencers/{influencer}/edit', [InfluencerController::class, 'update']);
-// In your routes/web.php or routes/api.php
-// Route::patch('/api/influencer/{id}/status/approve', [InfluencerController::class, 'approve']);
-// Route::patch('/api/influencer/{id}/status/archive', [InfluencerController::class, 'archive']);
-
-// Route::get('/api/influencers/count', [InfluencerController::class, 'count']);
 
 // Customer Route
 Route::post('/api/customers/{customer}/edit', [CustomerController::class, 'update']);
@@ -134,6 +129,9 @@ Route::post('/api/home/qrcode', [QrcodeController::class, 'homeQrCode']);
 
 Route::post('/api/discount/store', [DiscountController::class, 'store']);
 
+Route::post('/api/raffles/create', [RaffleController::class, 'store']);
+
+Route::get('/api/raffles', [RaffleController::class, 'index']);
 
 
 

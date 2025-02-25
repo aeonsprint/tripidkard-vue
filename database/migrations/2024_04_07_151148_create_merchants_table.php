@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('merchants', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->unique();
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->string('business_code')->unique()->nullable();
             $table->string('card_code')->unique()->nullable();
             $table->string('dti')->nullable();

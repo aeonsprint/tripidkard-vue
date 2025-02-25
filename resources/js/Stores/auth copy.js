@@ -113,12 +113,13 @@ export const useAuthStore = defineStore("auth", {
             }
         },
 
-        async logout() {
-            const router = useRouter(); // Dapat nasa loob ng function ang useRouter()
+        logout() {
             this.authUser = null;
-            await axios.post("/logout");
-            localStorage.removeItem("authUser");
-            router.push("/login"); // Redirect sa login page
+            this.isAuthenticated = false;
+            localStorage.removeItem('authUser');
+            // Maaari kang mag-navigate sa login page pagkatapos mag-logout
+            const router = useRouter();
+            router.push('/login');
         },
 
 

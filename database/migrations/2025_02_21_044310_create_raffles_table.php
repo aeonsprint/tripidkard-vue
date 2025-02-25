@@ -13,6 +13,16 @@ return new class extends Migration
     {
         Schema::create('raffles', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->constrained()->unique();
+            $table->string('title');
+            $table->string('prize');
+            $table->string('mechanics');
+            $table->string('total_winner');
+            $table->date('entries_deadline');
+            $table->date('draw_date');
+            $table->string('image')->nullable();
+            $table->integer('status')->default(0); // 0 = inactive, 1 = active
+
             $table->timestamps();
         });
     }

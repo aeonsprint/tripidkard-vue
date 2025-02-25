@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\Merchant;
-use App\Models\Enterprise;
 use App\Models\Influencer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -58,43 +57,140 @@ class ProfileController extends Controller
     }
 
     public function updateProfile(Request $request)
-    {
+{
+    $user = $request->user();
 
-        $user = $request->user();
+    // Validate the request
+    $validatedData = $request->validate([
+        'fname' => 'required|string|max:255',
+        'mname' => 'nullable|string|max:255',
+        'lname' => 'required|string|max:255',
+        'email' => 'required|email|max:255|unique:users,email,' . $user->id,
+        'contact' => 'required|string|max:20|unique:users,contact,' . $user->id,
+    ]);
 
-        $validate = $request->validate([
-            'fname' => 'required',
-            'mname' => '',
-            'lname' => 'required',
-            'email' => 'required|unique:users,email,' . $user->id,
-            'business_name' => 'required',
-            'contact' => 'required|unique:users,contact,' . $user->id,
-        ]);
+    // Update the user with validated data
+    $user->update($validatedData);
 
-        // Kumuha ng mga validated data
-        $validatedData = $request->only(['fname', 'mname', 'lname', 'email', 'contact']);
+    // Determine display name based on role
+    $name = $user->role === 'Merchant' ? $user->business_name : trim("{$user->fname} {$user->mname} {$user->lname}");
 
-        // I-update ang impormasyon ng user
-        $user->update($validatedData);
+    // Log the update action
+    activity()
+        ->performedOn($user)
+        ->causedBy($user)
+        ->withProperties([
+            'role' => $user->role,
+            'status' => $user->status,
+            'updated_fields' => array_keys($validatedData),
+        ])
+        ->log("$name updated their profile.");
+
+    // Return response with updated user data
+    return response()->json([
+        'message' => 'User information updated successfully.',
+        'user' => $user
+    ], 200);
+}
 
 
-        $user = Auth::user();
-        // Get the authenticated user
-        $user = Auth::user();
-        $name = $user->role === 'Merchant'
-        ? $user->business_name
-        : ($user->role === 'Influencer'
-            ? $user->blog_name
-            : trim($user->fname . ' ' . $user->mname . ' ' . $user->lname));
+public function updateDiscount(Request $request)
+{
+    $user = $request->user();
 
-        // activity()
-        //     ->performedOn($user)
-        //     ->causedBy($user)
-        // ->withProperties(['role' => $user->role, 'status' => $user->status])
-        // ->log("$name updated their profile.");
+    // Validate the request
+    $validatedData = $request->validate([
+        'discount' => 'required|numeric|min:0|max:100', // Dapat number, at limitadong 0-100%
+        'description' => 'nullable|string',
+    ]);
 
-        return response()->json(['message' => 'User information updated successfully'], 200);
+    // Kunin ang business na konektado sa user
+    $business = Merchant::where('user_id', $user->id)->first();
+
+    // Kumpirmahin kung may negosyo ang user
+    if (!$business) {
+        return response()->json(['message' => 'User does not have an associated business'], 404);
     }
+
+    // I-update ang discount sa Merchant model
+    $business->update([
+        'discount' => $validatedData['discount'],
+        'description' => $validatedData['description'] ?? $business->description,
+    ]);
+
+    // Tukuyin ang display name batay sa role
+    $name = $user->role === 'Merchant' ? $business->business_name : trim("{$user->fname} {$user->mname} {$user->lname}");
+
+    // Log the update action
+    activity()
+        ->performedOn($business)
+        ->causedBy($user)
+        ->withProperties([
+            'role' => $user->role,
+            'status' => $user->status,
+            'updated_fields' => array_keys($validatedData),
+        ])
+        ->log("$name updated their Discount.");
+
+    // Return response with updated data
+    return response()->json([
+        'message' => 'Business discount updated successfully.',
+        'business' => $business
+    ], 200);
+}
+
+
+
+public function updateAddress(Request $request)
+{
+    $user = $request->user();
+
+    // Validate the request
+    $validatedData = $request->validate([
+        'business_name' => 'required|max:255',
+        'street' => 'required|max:255',
+        'city' => 'required|max:255',
+        'province' => 'required|max:255',
+        'zip' => 'required|max:255',
+
+    ]);
+
+    // Kunin ang business na konektado sa user
+    $business = Merchant::where('user_id', $user->id)->first();
+
+    // Kumpirmahin kung may negosyo ang user
+    if (!$business) {
+        return response()->json(['message' => 'User does not have an associated business'], 404);
+    }
+
+    // I-update ang discount sa Merchant model
+    $business->update([
+        'business_name' => $validatedData['business_name'],
+        'street' => $validatedData['street'],
+        'province' => $validatedData['province'],
+        'zip' => $validatedData['zip'],
+    ]);
+
+    // Tukuyin ang display name batay sa role
+    $name = $user->role === 'Merchant' ? $business->business_name : trim("{$user->fname} {$user->mname} {$user->lname}");
+
+    // Log the update action
+    activity()
+        ->performedOn($business)
+        ->causedBy($user)
+        ->withProperties([
+            'role' => $user->role,
+            'status' => $user->status,
+            'updated_fields' => array_keys($validatedData),
+        ])
+        ->log("$name updated their Address.");
+
+    // Return response with updated data
+    return response()->json([
+        'message' => 'Address updated successfully.',
+        'business' => $business
+    ], 200);
+}
 
     public function updateBusiness(Request $request)
     {
@@ -144,99 +240,97 @@ class ProfileController extends Controller
                 ? $user->blog_name
                 : trim($user->fname . ' ' . $user->mname . ' ' . $user->lname));
 
-            // activity()
-            //     ->performedOn($user)
-            //     ->causedBy($user)
-            // ->withProperties(['role' => $user->role, 'status' => $user->status])
-            // ->log("$name updated their business information.");
+
 
             return response()->json(['message' => 'Business information updated successfully'], 200);
         }
     }
 
-    public function uploadImage(Request $request)
+    public function updatePassword(Request $request, UpdateUserPasswordAction $updater)
     {
-        // Ensure the file is present in the request
-        if ($request->hasFile('profile_picture')) {
-            // Get the current avatar path
-            $previousPath = $request->user()->getRawOriginal('avatar');
+        $user = $request->user();
 
-            // Define the path for the new image
-            $path = 'photos/logo';
+        // Validate inputs
+        $validatedData = $request->validate([
+            'currentPassword' => 'required|string',
+            'password' => 'required|string|min:8|confirmed',
+        ]);
 
-            // Ensure the directory exists
+        try {
+            // Update the password
+            $updater->update($user, [
+                'current_password' => $validatedData['currentPassword'],
+                'password' => $validatedData['password'],
+            ]);
+
+            // Get display name based on role
+            $name = match ($user->role) {
+                'Merchant' => $user->business_name,
+                default => trim("{$user->fname} {$user->mname} {$user->lname}"),
+            };
+
+            // Log the action
+            activity()
+                ->performedOn($user)
+                ->causedBy($user)
+                ->withProperties([
+                    'role' => $user->role,
+                    'status' => $user->status
+                ])
+                ->log("$name changed their password.");
+
+            return response()->json(['message' => 'Password changed successfully'], 200);
+        } catch (InvalidPasswordException $e) {
+            return response()->json([
+                'message' => 'The provided password does not match your current password.',
+            ], 422);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Failed to change password.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+
+    public function uploadLogo(Request $request)
+    {
+        $user = Auth::user();
+
+        $request->validate([
+            'logo' => 'required|image|mimes:jpeg,png|max:2048', // Only accept PNG/JPG, max 2MB
+        ]);
+
+        if ($request->hasFile('logo')) {
+            $previousPath = $user->getRawOriginal('avatar');
+
+            $path = 'photos/logo/' . $user->id;
             if (!Storage::disk('public')->exists($path)) {
                 Storage::disk('public')->makeDirectory($path);
             }
 
-            // Store the new image
-            $link = Storage::disk('public')->put($path, $request->file('profile_picture'));
+            $file = $request->file('logo');
+            $filename = time() . '.' . $file->getClientOriginalExtension();
+            $filePath = $file->storeAs($path, $filename, 'public');
 
-            // Update the user's avatar in the database
-            $request->user()->update(['avatar' => $link]);
+            $user->update(['avatar' => $filePath]);
 
-            // Delete the previous image if it exists and is not empty
             if ($previousPath && Storage::disk('public')->exists($previousPath)) {
                 Storage::disk('public')->delete($previousPath);
             }
 
-            // Get the authenticated user
-            $user = Auth::user();
-            $name = $user->role === 'Merchant'
-                ? $user->business_name
-                : ($user->role === 'Influencer'
-                    ? $user->blog_name
-                    : trim($user->fname . ' ' . $user->mname . ' ' . $user->lname));
-
-            // Log the activity
-            // activity()
-            //     ->performedOn($user)
-            //     ->causedBy($user)
-            //     ->withProperties(['role' => $user->role, 'status' => $user->status])
-            //     ->log("$name uploaded their profile picture.");
-
-            return response()->json(['message' => 'Profile Picture Uploaded Successfully']);
+            return response()->json([
+                'message' => 'Logo uploaded successfully',
+                'avatar' => asset('storage/' . $filePath)
+            ]);
         }
 
         return response()->json(['message' => 'No image uploaded'], 400);
     }
 
 
-    // public function uploadImage(Request $request)
-    // {
-
-    //     if ($request->hasFile('profile_picture')) {
-
-    //         $previousPath = $request->user()->getRawOriginal('avatar');
-
-    //         $link = Storage::put('/photos/logo', $request->file('profile_picture'));
-
-    //         $request->user()->update(['avatar' => $link]);
-
-    //         Storage::delete($previousPath);
-
-    //         $user = Auth::user();
-    //         // Get the authenticated user
-    //         $user = Auth::user();
-    //         $name = $user->role === 'Merchant'
-    //         ? $user->business_name
-    //         : ($user->role === 'Influencer'
-    //             ? $user->blog_name
-    //             : trim($user->fname . ' ' . $user->mname . ' ' . $user->lname));
-
-    //         activity()
-    //             ->performedOn($user)
-    //             ->causedBy($user)
-    //         ->withProperties(['role' => $user->role, 'status' => $user->status])
-    //         ->log("$name uploaded their profile picture.");
-
-    //         return response()->json(['message' => 'Profile Picture Uploaded Successfuly']);
-
-    //     }
-    // }
     public function uploadBackground(Request $request)
     {
-        // Validate only if files are present
         $request->validate([
             'photo1' => 'nullable|image|max:2048',
             'photo2' => 'nullable|image|max:2048',
@@ -245,7 +339,7 @@ class ProfileController extends Controller
 
         $user = $request->user();
         $merchant = Merchant::where('user_id', $user->id)->first();
-        $path = 'photos/background';
+        $path = "photos/background/{$user->id}";
 
         // Ensure the directory exists
         if (!Storage::disk('public')->exists($path)) {
@@ -255,17 +349,17 @@ class ProfileController extends Controller
         $paths = [];
         foreach (['photo1', 'photo2', 'photo3'] as $photo) {
             if ($request->hasFile($photo)) {
-                // Check if there's an existing photo and delete it
+                // Delete existing file if it exists
                 if ($merchant->$photo) {
                     Storage::disk('public')->delete($merchant->$photo);
                 }
 
-                // Save the new file and store its path
-                $paths[$photo] = Storage::disk('public')->put($path, $request->file($photo));
+                // Store new file and save its path
+                $paths[$photo] = $request->file($photo)->store($path, 'public');
             }
         }
 
-        // Update the merchant's photo columns in the database
+        // Update merchant record with new paths
         $merchant->update([
             'photo1' => $paths['photo1'] ?? $merchant->photo1,
             'photo2' => $paths['photo2'] ?? $merchant->photo2,
@@ -308,31 +402,6 @@ class ProfileController extends Controller
 
 
 
-    // public function changePassword(Request $request, UpdateUserPasswordAction $updater)
-    // {
 
-    //     $updater->update(
-    //         // auth()->user(),
-    //         [
-    //             'current_password' => $request->currentPassword,
-    //             'password' => $request->password,
-    //             'password_confirmation' => $request->passwordConfirmation,
-    //         ]
-    //     );
-    //     $user = Auth::user();
-    //     // Get the authenticated user
-    //     $user = Auth::user();
-    //     $name = $user->role === 'Merchant'
-    //     ? $user->business_name
-    //     : ($user->role === 'Influencer'
-    //         ? $user->blog_name
-    //         : trim($user->fname . ' ' . $user->mname . ' ' . $user->lname));
 
-    //     activity()
-    //         ->performedOn($user)
-    //         ->causedBy($user)
-    //     ->withProperties(['role' => $user->role, 'status' => $user->status])
-    //     ->log("$name changed their password.");
-    //     return response()->json(['message' => 'Password change Successfuly']);
-    // }
 }
