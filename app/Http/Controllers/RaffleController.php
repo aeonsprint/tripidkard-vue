@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Raffle;
+use App\Models\Merchant;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class RaffleController extends Controller
 {
@@ -95,10 +97,30 @@ class RaffleController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function raffleEdit($id)
     {
-        //
+        // Kunin ang merchant gamit ang user_id at i-join sa raffles
+        $merchantWithRaffle = Merchant::with('raffles')
+            ->where('id', $id)
+            ->first(); // ✅ Para hindi mag-error
+
+        if (!$merchantWithRaffle) {
+            return response()->json(['error' => 'Merchant not found.'], 404);
+        }
+
+        return response()->json($merchantWithRaffle);
     }
+
+
+    public function raffleShow($id)
+    {
+
+
+        $raffles = Raffle::where('id', $id)->get();
+
+        return response()->json($raffles);
+    }
+
 
     /**
      * Update the specified resource in storage.

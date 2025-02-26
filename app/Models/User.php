@@ -3,15 +3,17 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Models\Raffle;
 use App\Models\CardCode;
 use App\Models\Merchant;
+use Spatie\Activitylog\LogOptions;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Notifications\Notifiable;
+use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Spatie\Activitylog\Traits\LogsActivity;
-use Spatie\Activitylog\LogOptions;
+
 class User extends Authenticatable
 {
     use HasFactory, Notifiable, LogsActivity;
@@ -64,6 +66,11 @@ class User extends Authenticatable
     public function merchant()
     {
         return $this->hasOne(Merchant::class);
+    }
+
+    public function raffle()
+    {
+        return $this->hasOne(Raffle::class);
     }
 
 

@@ -132,6 +132,8 @@ Route::post('/api/discount/store', [DiscountController::class, 'store']);
 Route::post('/api/raffles/create', [RaffleController::class, 'store']);
 
 Route::get('/api/raffles', [RaffleController::class, 'index']);
+Route::get('/api/raffles/{id}/edit', [RaffleController::class, 'raffleEdit']);
+Route::get('/api/raffles/{id}/show', [RaffleController::class, 'raffleShow']);
 
 
 

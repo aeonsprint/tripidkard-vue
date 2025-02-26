@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Raffle;
 
 class Merchant extends Model
 {
@@ -22,5 +23,12 @@ class Merchant extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function raffles()
+    {
+        return $this->hasMany(Raffle::class, 'user_id', 'user_id');
+    }
+
+
 
 }

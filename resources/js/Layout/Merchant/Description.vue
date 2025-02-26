@@ -20,14 +20,16 @@
             <div v-if="raffles.length" class="mt-5 sm:mt-10 lg:mt-0 lg:col-span-5">
                 <div v-for="raffle in raffles" :key="raffle.id"
                     class="relative flex flex-row bg-white shadow-md rounded-lg w-full overflow-hidden items-center mb-4">
-                    <!-- Image -->
-                    <div class="w-1/4">
-                        <img :src="raffle.image ? `/storage/raffle/${raffle.image}` : defaultRaffleImage"
-                            alt="raffle-image" class="w-full h-full object-cover">
+
+                    <!-- Image (Occupies full height) -->
+                    <div class="w-1/3 h-full">
+                        <img :src="raffle.image ? `/storage/${raffle.image}` : defaultRaffleImage"
+                            alt="raffle-image"
+                            class="w-full h-full object-cover">
                     </div>
 
                     <!-- Raffle Details -->
-                    <div class="p-4 flex flex-col justify-between w-3/4">
+                    <div class="p-4 flex flex-col justify-between w-2/3">
                         <h6 class="text-gray-900 text-md font-bold">
                             {{ raffle.description || "No Title Available" }}
                         </h6>
@@ -36,10 +38,10 @@
                         </p>
 
                         <!-- Join Now Button -->
-                        <router-link to="/raffle/details"
+                        <a  :href="`/raffle/details/${raffle.id}`"
                             class="mt-3 w-fit rounded-md bg-blue-600 py-2 px-4 text-center text-sm text-white transition-all shadow-md hover:bg-blue-700 focus:bg-blue-700 active:bg-blue-800">
                             Join Now
-                        </router-link>
+                    </a>
                     </div>
                 </div>
             </div>
@@ -56,7 +58,7 @@ import axios from 'axios';
 const route = useRoute();
 const merchant = ref({});
 const raffles = ref([]);
-const defaultRaffleImage = "https://via.placeholder.com/150"; // Placeholder image
+const defaultRaffleImage = "/storage/img/logo.jpg"; // Placeholder image
 
 // Fetch merchant data
 const fetchMerchant = async () => {
@@ -71,8 +73,9 @@ const fetchMerchant = async () => {
 // Fetch raffles data
 const fetchRaffles = async () => {
     try {
-        const response = await axios.get('/api/raffles'); // Change endpoint kung may filter per merchant
-        raffles.value = response.data;
+        const response = await axios.get(`/api/raffles/${route.params.merchant_id}/edit`); // Change endpoint kung may filter per merchant
+        merchant.value = response.data;
+        raffles.value = response.data.raffles || []; // ✅ Kunin ang raffles mula sa merchant response
     } catch (error) {
         console.error("Error fetching raffles:", error);
     }

@@ -8,7 +8,14 @@
      -->
 
     <MenuBar />
-    <SecondBanner />
+    <SecondBanner
+        title="<span class='text-blue-500'>Expand Business</span> and <span class='text-blue-500'>Attract Customers</span> with TripidKard"
+        subtitle="Discover the power of TripidKard for your business. Join us today and <br> take your business to new heights!"
+        :buttons="[
+            { text: 'Get Started', link: '/merchant/register', primary: true },
+            { text: 'Learn More', link: '#', primary: false }
+        ]"
+    />
     <CardGroup />
     <SecondSection />
     <FAQ />

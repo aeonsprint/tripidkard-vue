@@ -58,6 +58,7 @@ import RaffleDetails from "./Pages/Merchant/RaffleDetails.vue";
 import MerchantCenter from "./Pages/Merchant/Center.vue";
 import MerchantSignup from "./Pages/Merchant/SignUp.vue";
 import CustomerSignup from "./Pages/Customer/Signup.vue";
+import DCIA from "./Pages/Dcia/DciaList.vue";
 import MerchantLogin from "./Pages/Login/Login.vue";
 import AdminLogin from "./Pages/Login/AdminLogin.vue";
 
@@ -503,7 +504,7 @@ const routesDefault = [
 
 
     {
-        path: "/raffle/details",
+        path: "/raffle/details/:id",
         name: "raffle.details",
         component: RaffleDetails,
         meta: {
@@ -529,6 +530,16 @@ const routesDefault = [
         meta: {
             title: "Customer Signup",
             breadcrumb: "Home/Customer/Signup",
+            requiresGuest: true,
+        },
+    },
+    {
+        path: "/dcia",
+        name: "dcia",
+        component: DCIA,
+        meta: {
+            title: "DCIA Signup",
+            breadcrumb: "Home/DCIA",
             requiresGuest: true,
         },
     },
