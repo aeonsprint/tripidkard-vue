@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\EmailController;
 use App\Http\Controllers\QrcodeController;
 use App\Http\Controllers\RaffleController;
+use App\Http\Controllers\SocialController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CardCodeController;
 use App\Http\Controllers\CustomerController;
@@ -136,7 +137,12 @@ Route::get('/api/raffles/{id}/edit', [RaffleController::class, 'raffleEdit']);
 Route::get('/api/raffles/{id}/show', [RaffleController::class, 'raffleShow']);
 
 
+Route::get('/auth/google', [SocialController::class, 'redirectGoogle'])->name('google-auth');
+Route::get('/auth/google-callback', [SocialController::class, 'callbackGoogle']);
 
+Route::get('auth/facebook', [SocialController::class, 'redirectFacebook']);
+// Route to handle the callback from Facebook after authentication
+Route::get('auth/facebook-callback', [SocialController::class, 'callbackFacebook']);
 
 
 Route::get('{view}', ApplicationController::class)->where('view', '(.*)');

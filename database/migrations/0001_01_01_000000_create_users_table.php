@@ -16,12 +16,13 @@ return new class extends Migration
             $table->string('fname');
             $table->string('mname')->nullable();
             $table->string('lname');
-            $table->string('contact')->unique();
+            $table->string('contact')->unique()->nullable();
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
+            $table->string('password')->nullable();
             $table->integer('loyalty_stars')->nullable();
-            $table->enum('role', ['Admin','Merchant', 'Influencer', 'Customer'])->default('Merchant');
+            $table->enum('account', ['Common','Pro'])->default('Common');
+            $table->enum('role', ['Admin','Merchant', 'Influencer', 'Customer'])->default('Customer');
             $table->tinyInteger('status');
             $table->rememberToken();
             $table->timestamps();

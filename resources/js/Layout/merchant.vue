@@ -2,14 +2,17 @@
     <div class="container sm:max-w-[100rem] lg:max-w-[75rem] mx-auto p-4">
         <div class="border rounded p-3 mb-3">
             <div class="flex justify-between items-center">
-                <h1 class="text-lg font-bold text-gray-900 dark:text-neutral-100">Merchants Deals and Discounts</h1>
+                <h1 class="text-lg font-bold text-gray-900 dark:text-neutral-100">
+                    Merchants Deals and Discounts
+                </h1>
                 <div v-if="!isMerchantListPage" class="text-sm text-gray-900 dark:text-neutral-100">
                     <router-link to="/merchant/list">See More</router-link>
                 </div>
             </div>
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+        <!-- Responsive Grid Layout -->
+        <div class="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
             <div v-if="filteredMerchants.length === 0" class="col-span-full text-center">
                 <div class="max-w-sm mx-auto shadow-lg">
                     <img src="/storage/img/not-found.png" class="w-full h-48 object-cover" alt="No Results" />
@@ -23,8 +26,11 @@
                 <div class="relative bg-white border rounded-xl shadow-sm overflow-hidden flex flex-col h-full">
                     <a :href="`/merchant/page/${merchant.merchant_id}`">
                         <div class="relative">
-                            <img :src="merchant.avatar ? `/storage/${merchant.avatar}` : '/storage/img/logo.jpg'"
-                                class="w-full h-48 object-cover" alt="Merchant Avatar" />
+                            <img
+                                :src="merchant.avatar ? `/storage/${merchant.avatar}` : '/storage/img/logo.jpg'"
+                                class="w-full h-40 sm:h-48 md:h-56 object-cover"
+                                alt="Merchant Avatar"
+                            />
 
                             <span v-if="merchant.discount" class="absolute top-2 left-2 bg-blue-600 text-white text-xs font-bold px-2 py-1 rounded">
                                 -{{ merchant.discount }}%
@@ -51,7 +57,9 @@
                                 {{ merchant.business_category || 'No Category' }} > {{ merchant.business_sub_category || 'No Subcategory' }}
                             </span>
                             <div class="flex items-center space-x-2">
-                                <i class="fa fa-heart cursor-pointer" :class="{'text-red-500': merchant.isHearted, 'text-gray-500': !merchant.isHearted}"></i>
+                                <i class="fa fa-heart cursor-pointer" @click="toggleHeart(merchant)"
+                                    :class="{'text-red-500': merchant.isHearted, 'text-gray-500': !merchant.isHearted}">
+                                </i>
                                 <span class="text-xs sm:text-sm text-gray-600">2.8k</span>
                             </div>
                         </div>
@@ -60,6 +68,7 @@
             </div>
         </div>
 
+        <!-- Pagination -->
         <div class="flex justify-center sm:justify-end items-center mt-4 bg-white p-2 rounded-lg">
             <button :disabled="currentPage === 1" @click="currentPage--"
                 class="bg-white text-gray-800 px-4 py-2 rounded-lg hover:bg-blue-500 hover:text-white disabled:bg-gray-300 disabled:text-gray-500">

@@ -1,12 +1,41 @@
 <template>
-    <header class="flex justify-center items-center p-4 border-b border-gray-200 bg-white">
-        <div class="flex items-center space-x-6 w-full max-w-3xl">
+    <header class="flex justify-center items-center p-4 border-b border-gray-200  bg-white w-full">
+        <div class="flex items-center space-x-6 w-full max-w-3xl ">
             <!-- Logo -->
             <router-link to="/">
-                <Logo class="w-20 h-13" />
+                <Logo class=" hidden md:flex w-20 h-13" />
             </router-link>
 
-            <!-- Button to Open Modal -->
+            <!-- Mobile Menu Button (Hidden on Desktop) -->
+            <button @click="toggleMenu" class="md:hidden p-2">
+
+                <span class="material-icons material-symbols-outlined w-6 h-6">
+                    lists
+                </span>
+
+            </button>
+
+            <!-- Desktop Navigation (Visible on Desktop) -->
+            <div class="hidden md:flex items-center space-x-6 flex-1">
+                <BaseButton @click="openModal" name="location">
+                    <span>Places</span>
+                    <svg class="w-4 h-4 ml-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                </BaseButton>
+
+                <input v-model="searchQuery" @keyup.enter="searchDiscount" type="text"
+                    placeholder="Search for deals and discounts"
+                    class="px-4 py-2 rounded-full bg-gray-100 text-gray-600 flex-1 max-w-lg">
+
+                <BaseButton name="blue" to="/login">Login</BaseButton>
+            </div>
+        </div>
+
+        <!-- Mobile Menu (Hidden by default) -->
+        <div v-if="isMenuOpen"
+            class="absolute top-16 left-0 w-full bg-white p-4 shadow-md flex flex-col space-y-4 md:hidden z-[60]">
             <BaseButton @click="openModal" name="location">
                 <span>Places</span>
                 <svg class="w-4 h-4 ml-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
@@ -15,14 +44,9 @@
                 </svg>
             </BaseButton>
 
-            <!-- Search Bar (Triggers Search on Enter) -->
-            <input v-model="searchQuery"
-                @keyup.enter="searchDiscount"
-                type="text"
-                placeholder="Search for deals and discounts"
-                class="px-4 py-2 rounded-full bg-gray-100 text-gray-600 flex-1 max-w-lg">
+            <input v-model="searchQuery" @keyup.enter="searchDiscount" type="text"
+                placeholder="Search for deals and discounts" class="px-4 py-2 rounded bg-gray-100 text-gray-600 w-full">
 
-            <!-- Login Button -->
             <BaseButton name="blue" to="/login">Login</BaseButton>
         </div>
     </header>
@@ -49,20 +73,20 @@ export default {
         const router = useRouter();
         const route = useRoute();
         const isModalOpen = ref(false);
+        const isMenuOpen = ref(false);
 
         const openModal = () => { isModalOpen.value = true; };
         const closeModal = () => { isModalOpen.value = false; };
+        const toggleMenu = () => { isMenuOpen.value = !isMenuOpen.value; };
 
-        // Redirect to merchant list with discount query when Enter is pressed and force reload
         const searchDiscount = () => {
             if (searchQuery.value.trim() !== '') {
                 router.push({ path: "/merchant/list", query: { discount: searchQuery.value } }).then(() => {
-                    window.location.reload(); // Force reload to apply query changes
+                    window.location.reload();
                 });
             }
         };
 
-        // Auto-fill input if there's an existing discount query
         watch(() => route.query.discount, (newDiscount) => {
             searchQuery.value = newDiscount || '';
         }, { immediate: true });
@@ -72,7 +96,9 @@ export default {
             openModal,
             closeModal,
             searchQuery,
-            searchDiscount
+            searchDiscount,
+            isMenuOpen,
+            toggleMenu
         };
     }
 };

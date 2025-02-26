@@ -65,7 +65,7 @@
         </div>
 
         <!-- Image Section -->
-        <div class="overflow-hidden pb-3 w-[70rem] h-[400px]">
+        <div class="overflow-hidden pb-3 ">
             <div class="flex justify-center items-center w-full h-full">
                 <img :src="currentImage" alt="Merchant Banner" class="image-slider" />
             </div>

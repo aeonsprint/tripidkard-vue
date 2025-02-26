@@ -29,6 +29,8 @@ class User extends Authenticatable
         'lname',
         'contact',
         'email',
+        'facebbok_id',
+        'google_id',
         'password',
         'role',
         'avatar',

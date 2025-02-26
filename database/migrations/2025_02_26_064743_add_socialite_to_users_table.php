@@ -11,8 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('merchants', function (Blueprint $table) {
-            $table->integer('views')->default(0)->after('logo');
+        Schema::table('users', function (Blueprint $table) {
+            $table->string('google_id')->nullable()->unique()->after('email');
+            $table->string('facebook_id')->nullable()->unique()->after('email');
+
         });
     }
 
@@ -21,8 +23,10 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('merchants', function (Blueprint $table) {
-            $table->dropColumn('views');
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropColumn('google_id');
+            $table->dropColumn('facebook_id');
+
         });
     }
 };
