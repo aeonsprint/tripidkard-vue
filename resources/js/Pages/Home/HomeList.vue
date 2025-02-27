@@ -1,15 +1,14 @@
 <template>
-
-
-
     <TopBar />
     <Category />
     <Banner />
 
-    <Merchant />
+    <!-- Example: Show 8 merchants on the homepage -->
+    <Merchant :itemsPerPage="8" title="Featured Merchants" :showSeeMore="true" />
+
+    <!-- <Merchant :itemsPerPage="12" title="New Arrivals" :showSeeMore="false" /> -->
 
     <Footer />
-
 </template>
 
 <script>
@@ -27,9 +26,5 @@ export default {
         Category,
         Footer,
     },
-    setup() {
-    },
 };
 </script>
-
-<

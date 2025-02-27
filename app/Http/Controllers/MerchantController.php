@@ -38,51 +38,53 @@ class MerchantController extends Controller
         ];
 
         $merchants = Merchant::query()
-            ->select([
-                'merchants.id AS merchant_id',
-                'merchants.business_name',
-                'merchants.business_category',
-                'merchants.business_sub_category',
-                'merchants.discount',
-                'merchants.stars_points',
-                'users.id AS user_id',
-                'users.email',
-                'users.contact',
-                'merchants.discount',
-                'merchants.city',
-                'merchants.province',
-                // Concatenate full name
-                DB::raw("CONCAT_WS(' ', COALESCE(users.fname, ''), COALESCE(users.mname, ''), COALESCE(users.lname, '')) AS merchant_name"),
-                // Concatenate full address
-                DB::raw("CONCAT_WS(', ', COALESCE(merchants.street, ''), COALESCE(merchants.city, ''), COALESCE(merchants.province, ''), COALESCE(merchants.zip, '')) AS address")
-            ])
-            ->leftJoin('users', 'merchants.user_id', '=', 'users.id')
-            ->when(request('query'), function ($query, $searchQuery) use ($searchFields) {
-                $query->where(function ($query) use ($searchFields, $searchQuery) {
-                    foreach ($searchFields as $field) {
-                        $query->orWhere($field, 'like', "%{$searchQuery}%");
-                    }
-                });
-            })
-            ->when(request('category'), function ($query, $category) {
-                $query->where('business_category', 'like', "%{$category}%");
-            })
-            ->when(request('discount'), function ($query, $discount) {
-                $query->where('discount', '=', $discount);
-            })
-            ->when(request("city"), function ($query, $city) {
-                $query->where("city", "like", "%{$city}%");
-            })
-            ->when(request("province"), function ($query, $province) {
-                $query->where("province", "like", "%{$province}%");
-            })
-            ->where('users.status', '=', '1')
-            ->orderBy('stars_points', 'desc')
-            ->orderBy('discount', 'desc')
-            ->get();
+        ->select([
+            'merchants.id AS merchant_id',
+            'merchants.business_name',
+            'merchants.business_category',
+            'merchants.business_sub_category',
+            'merchants.discount',
+            'merchants.stars_points',
+            'merchants.created_at',
+            'users.id AS user_id',
+            'users.email',
+            'users.contact',
+            'merchants.city',
+            'merchants.province',
+            DB::raw("CONCAT_WS(' ', COALESCE(users.fname, ''), COALESCE(users.mname, ''), COALESCE(users.lname, '')) AS merchant_name"),
+            DB::raw("CONCAT_WS(', ', COALESCE(merchants.street, ''), COALESCE(merchants.city, ''), COALESCE(merchants.province, ''), COALESCE(merchants.zip, '')) AS address")
+        ])
+        ->leftJoin('users', 'merchants.user_id', '=', 'users.id')
+        ->when(request('query'), function ($query, $searchQuery) use ($searchFields) {
+            $query->where(function ($query) use ($searchFields, $searchQuery) {
+                foreach ($searchFields as $field) {
+                    $query->orWhere($field, 'like', "%{$searchQuery}%");
+                }
+            });
+        })
+        ->when(request('category'), function ($query, $category) {
+            $query->where('business_category', 'like', "%{$category}%");
+        })
+        ->when(request('discount'), function ($query, $discount) {
+            $query->where('discount', '=', $discount);
+        })
+        ->when(request("city"), function ($query, $city) {
+            $query->where("city", "like", "%{$city}%");
+        })
+        ->when(request("province"), function ($query, $province) {
+            $query->where("province", "like", "%{$province}%");
+        })
+        ->where('users.status', '=', '1')
+        ->orderByRaw('CAST(merchants.discount AS UNSIGNED) DESC') // Para sigurado na number ang sorting
+        ->orderBy('merchants.created_at', 'asc') // Kung pareho ang discount, maunang narehistro ang mauuna
+        ->get();
+
+
 
         return response()->json($merchants);
     }
+
+
 
 
     public function indexPending()

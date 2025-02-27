@@ -1,8 +1,4 @@
 <template>
-    <div class="p-4  max-w-[75rem] mx-auto">
-      <!-- Title -->
-      <h2 class="text-2xl font-bold">Merchants Deals and Discounts</h2>
-      <p class="text-gray-500">5,000 merchants</p>
 
       <!-- Search Filter -->
       <div class="mt-4">
@@ -22,7 +18,6 @@
           </button>
         </div>
       </div>
-    </div>
   </template>
 
   <script>

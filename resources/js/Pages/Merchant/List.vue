@@ -6,9 +6,15 @@
     <Category />
 
     <Breadcrumb />
-    <Filter />
+    <div class="p-4 max-w-[75rem] mx-auto">
+        <h2 class="text-2xl font-bold">Merchants Deals and Discounts</h2>
+        <p class="text-gray-500">Total Merchants: {{ merchantCount }}</p> <!-- ✅ Display count -->
 
-    <Merchant />
+        <Filter />
+    </div>
+    <Merchant :itemsPerPage="12" title="All Merchants" :showSeeMore="false"
+    @updateMerchantCount="merchantCount = $event" />
+
 
     <Footer />
 
@@ -21,7 +27,7 @@ import Filter from '@/Layout/Merchant/Fillter.vue';
 import Breadcrumb from '@/Components/Molecules/Breadcrumb.vue';
 import Merchant from '@/Layout/Merchant.vue';
 import Footer from '@/Components/Organisms/Footer.vue';
-
+import { ref } from 'vue';
 export default {
     components: {
         TopBar,
@@ -32,6 +38,12 @@ export default {
         Footer,
     },
     setup() {
+
+        const merchantCount = ref(0);
+
+        return {
+            merchantCount
+        }
     },
 };
 </script>

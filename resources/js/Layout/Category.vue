@@ -20,7 +20,7 @@ const router = useRouter();
 
 const categories = [
     { name: "Retail", icon: Package },
-    { name: "Food & Beverage", icon: Utensils },
+    { name: "Food and Beverage", icon: Utensils },
     { name: "Health and Wellness", icon: Heart },
     { name: "Technology", icon: Laptop },
     { name: "Advertising Agencies", icon: Megaphone },

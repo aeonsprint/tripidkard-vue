@@ -3,16 +3,16 @@
         <div class="border rounded p-3 mb-3">
             <div class="flex justify-between items-center">
                 <h1 class="text-lg font-bold text-gray-900 dark:text-neutral-100">
-                    Merchants Deals and Discounts
+                    {{ title }}
                 </h1>
-                <div v-if="!isMerchantListPage" class="text-sm text-gray-900 dark:text-neutral-100">
+                <div v-if="showSeeMore && !isMerchantListPage" class="text-sm text-gray-900 dark:text-neutral-100">
                     <router-link to="/merchant/list">See More</router-link>
                 </div>
             </div>
         </div>
 
         <!-- Responsive Grid Layout -->
-        <div class="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-1">
+        <div class="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
             <div v-if="filteredMerchants.length === 0" class="col-span-full text-center">
                 <div class="max-w-sm mx-auto shadow-lg">
                     <img src="/storage/img/not-found.png" class="w-full h-48 object-cover" alt="No Results" />
@@ -24,23 +24,25 @@
 
             <div v-for="merchant in paginatedMerchants" :key="merchant.merchant_id" class="flex flex-col h-full">
                 <div class="relative bg-white border rounded-xl shadow-sm overflow-hidden flex flex-col h-full">
-                    <a :href="`/merchant/page/${merchant.merchant_id}`">
-                        <div class="relative">
+                    <div class="relative">
+                        <a :href="`/merchant/page/${merchant.merchant_id}`">
                             <img
                                 :src="merchant.avatar ? `/storage/${merchant.avatar}` : '/storage/img/logo.jpg'"
                                 class="w-full h-40 sm:h-48 md:h-56 object-cover"
                                 alt="Merchant Avatar"
                             />
-
                             <span v-if="merchant.discount" class="absolute top-2 left-2 bg-blue-600 text-white text-xs font-bold px-2 py-1 rounded">
                                 -{{ merchant.discount }}%
                             </span>
+                        </a>
 
-                            <button @click="toggleBookmark(merchant)" class="absolute top-2 right-2 bg-white p-2 rounded-full shadow-md">
-                                <i class="fa fa-bookmark" :class="{'text-blue-600': merchant.isBookmarked, 'text-gray-500': !merchant.isBookmarked}"></i>
-                            </button>
-                        </div>
-                    </a>
+                        <!-- 🛠️ Move the bookmark button outside the <a> tag and add @click.stop -->
+                        <button @click.stop="toggleBookmark(merchant)" class="absolute top-2 right-2 bg-white p-2 rounded-full shadow-md">
+                            <i class="fa fa-bookmark text-xl"
+                                :class="{'text-yellow-500': merchant.isBookmarked, 'text-gray-500': !merchant.isBookmarked}">
+                            </i>
+                        </button>
+                    </div>
 
                     <div class="p-4 flex flex-col flex-grow">
                         <a :href="`/merchant/page/${merchant.merchant_id}`" class="text-black">
@@ -91,15 +93,48 @@
 
 <script setup>
 import axios from "axios";
-import { ref, computed, onMounted, watch } from "vue";
+import { ref, computed, onMounted, watch, defineEmits, defineProps } from "vue";
 import { useRoute } from "vue-router";
 
+const props = defineProps({
+    itemsPerPage: { type: Number, default: 20 },
+    title: { type: String, default: "Merchants Deals and Discounts" },
+    showSeeMore: { type: Boolean, default: true }
+});
+
+const emit = defineEmits(["updateMerchantCount"]); // <-- Emit event
 const route = useRoute();
 const isMerchantListPage = computed(() => route.path === "/merchant/list");
 const merchants = ref([]);
-const searchQuery = ref(route.query.discount || '');
+const searchQuery = ref(route.query.discount || "");
 const currentPage = ref(1);
-const itemsPerPage = 20;
+const user = ref(null);
+const bookmarkedMerchants = ref(new Set());
+
+const getUser = async () => {
+    try {
+        const response = await axios.get("/api/user");
+        user.value = response.data;
+        getUserBookmarks();
+    } catch (error) {
+        user.value = null;
+    }
+};
+
+const getUserBookmarks = async () => {
+    if (!user.value) return;
+
+    try {
+        const response = await axios.get("/api/bookmarks");
+        bookmarkedMerchants.value = new Set(response.data.map(bookmark => bookmark.merchant_id));
+
+        merchants.value.forEach(merchant => {
+            merchant.isBookmarked = bookmarkedMerchants.value.has(merchant.merchant_id);
+        });
+    } catch (error) {
+        console.error("Error fetching bookmarks:", error);
+    }
+};
 
 const getMerchants = async () => {
     try {
@@ -108,35 +143,50 @@ const getMerchants = async () => {
                 category: route.query.category,
                 province: route.query.province,
                 city: route.query.city,
-                discount: searchQuery.value,
-            },
+                discount: searchQuery.value
+            }
         });
         merchants.value = Array.isArray(response.data) ? response.data : [];
+
+        merchants.value.forEach(merchant => {
+            merchant.isBookmarked = bookmarkedMerchants.value.has(merchant.merchant_id);
+        });
+
+        emit("updateMerchantCount", merchants.value.length); // <-- Emit merchant count
     } catch (error) {
         console.error("Error fetching merchants:", error);
     }
 };
 
-watch(merchants, (newVal) => {
-    console.log("Merchants updated:", newVal);
-});
+const toggleBookmark = async (merchant) => {
+    if (!user.value) {
+        return (window.location.href = "/login");
+    }
+
+    try {
+        if (merchant.isBookmarked) {
+            await axios.delete(`/api/bookmarks/${merchant.merchant_id}`);
+            bookmarkedMerchants.value.delete(merchant.merchant_id);
+        } else {
+            await axios.post("/api/bookmarks", { merchant_id: merchant.merchant_id });
+            bookmarkedMerchants.value.add(merchant.merchant_id);
+        }
+
+        merchant.isBookmarked = !merchant.isBookmarked;
+    } catch (error) {
+        console.error("Error toggling bookmark:", error);
+    }
+};
 
 onMounted(() => {
+    getUser();
     getMerchants();
 });
 
 const filteredMerchants = computed(() => merchants.value);
-const totalPages = computed(() => Math.ceil(filteredMerchants.value.length / itemsPerPage));
+const totalPages = computed(() => Math.ceil(filteredMerchants.value.length / props.itemsPerPage));
 const paginatedMerchants = computed(() => {
-    const start = (currentPage.value - 1) * itemsPerPage;
-    return filteredMerchants.value.slice(start, start + itemsPerPage);
+    const start = (currentPage.value - 1) * props.itemsPerPage;
+    return filteredMerchants.value.slice(start, start + props.itemsPerPage);
 });
-
-const toggleHeart = (merchant) => {
-    merchant.isHearted = !merchant.isHearted;
-};
-
-const toggleBookmark = (merchant) => {
-    merchant.isBookmarked = !merchant.isBookmarked;
-};
 </script>

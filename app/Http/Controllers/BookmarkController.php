@@ -2,64 +2,36 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Bookmark;
 use Illuminate\Http\Request;
+use App\Models\Bookmark;
+use Illuminate\Support\Facades\Auth;
 
 class BookmarkController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        $bookmarks = Bookmark::where('user_id', Auth::id())->get(['merchant_id']);
+        return response()->json($bookmarks);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $request->validate(['merchant_id' => 'required|exists:merchants,id']);
+
+        Bookmark::firstOrCreate([
+            'merchant_id' => $request->merchant_id,
+            'user_id' => Auth::id(),
+        ]);
+
+        return response()->json(['message' => 'Bookmark added'], 201);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Bookmark $bookmark)
+    public function destroy($merchant_id)
     {
-        //
-    }
+        Bookmark::where('merchant_id', $merchant_id)
+            ->where('user_id', Auth::id())
+            ->delete();
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Bookmark $bookmark)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Bookmark $bookmark)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Bookmark $bookmark)
-    {
-        //
+        return response()->json(['message' => 'Bookmark removed'], 200);
     }
 }

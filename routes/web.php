@@ -6,6 +6,7 @@ use App\Http\Controllers\QrcodeController;
 use App\Http\Controllers\RaffleController;
 use App\Http\Controllers\SocialController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\BookmarkController;
 use App\Http\Controllers\CardCodeController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DiscountController;
@@ -144,6 +145,9 @@ Route::get('auth/facebook', [SocialController::class, 'redirectFacebook']);
 // Route to handle the callback from Facebook after authentication
 Route::get('auth/facebook-callback', [SocialController::class, 'callbackFacebook']);
 
+Route::get('/api//bookmarks', [BookmarkController::class, 'index']); // Fetch user's bookmarks
+Route::post('/api//bookmarks', [BookmarkController::class, 'store']); // Add bookmark
+Route::delete('/api//bookmarks/{merchant_id}', [BookmarkController::class, 'destroy']); // Remove bookmark
 
 Route::get('{view}', ApplicationController::class)->where('view', '(.*)');
 
