@@ -1,5 +1,5 @@
 <template>
-    <div class="container sm:max-w-[100rem] lg:max-w-[75rem] mx-auto p-4">
+    <div class="container sm:max-w-[100rem] lg:max-w-[80rem] mx-auto p-4">
         <div class="border rounded p-3 mb-3">
             <div class="flex justify-between items-center">
                 <h1 class="text-lg font-bold text-gray-900 dark:text-neutral-100">
@@ -12,7 +12,7 @@
         </div>
 
         <!-- Responsive Grid Layout -->
-        <div class="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+        <div class="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-1">
             <div v-if="filteredMerchants.length === 0" class="col-span-full text-center">
                 <div class="max-w-sm mx-auto shadow-lg">
                     <img src="/storage/img/not-found.png" class="w-full h-48 object-cover" alt="No Results" />

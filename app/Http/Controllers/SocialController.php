@@ -11,59 +11,51 @@ use Laravel\Socialite\Facades\Socialite;
 class SocialController extends Controller
 {
 
-    public function redirectGoogle()
+    public function redirectGoogle(Request $request)
     {
-        return response()->json(['redirect_url' => Socialite::driver('google')->redirect()->getTargetUrl()]);
-    }
+        $event = $request->query('event', 'dcia1'); // Default event
+        session(['event' => $event]); // Store event in session
 
-    public function callbackGoogle()
+        return Socialite::driver('google')->redirect();
+    }
+    public function callbackGoogle(Request $request)
     {
         try {
             $google_user = Socialite::driver('google')->user();
+            $event = session('event', 'dcia1'); // Get event from session
 
-            // Find the user by google_id
             $user = User::where('google_id', $google_user->getId())->first();
 
             if (!$user) {
-                // If user not found by google_id, try to find by email
+                // Find user by email if google_id is not found
                 $user = User::where('email', $google_user->getEmail())->first();
 
                 if (!$user) {
-                    // Extract first and last name from Google full name
+                    // Extract first and last name
                     $fullName = explode(' ', $google_user->getName(), 2);
-                    $firstName = $fullName[0] ?? ''; // First name
-                    $lastName = $fullName[1] ?? ''; // Last name (empty if only one name)
+                    $firstName = $fullName[0] ?? 'Unknown';
+                    $lastName = $fullName[1] ?? 'User';
 
-                    // If last name is required but empty, set a default value
-                    if (empty($lastName)) {
-                        $lastName = 'Unknown';
-                    }
-
-                    // Create a new user
                     $user = User::create([
                         'fname' => $firstName,
-                        'lname' => $lastName,  // ✅ Add this field
+                        'lname' => $lastName,
                         'email' => $google_user->getEmail(),
                         'google_id' => $google_user->getId(),
                         'role' => 'Customer',
                         'status' => 1,
                     ]);
-                    return redirect('/dcia?already_registered=true');
-
                 } else {
-                    // If user found by email but not by google_id, update the user
-                    $user->update([
-                        'google_id' => $google_user->getId(),
-                    ]);
+                    // If user exists but no google_id, update it
+                    $user->update(['google_id' => $google_user->getId()]);
                 }
             }
 
             Auth::login($user);
-        return redirect('/dcia?already_registered=true');
 
+            return redirect("/dcia?already_registered=$event");
 
         } catch (\Throwable $th) {
-            dd('Something went wrong: ' . $th->getMessage());
+            return redirect('/dcia')->with('error', 'Something went wrong: ' . $th->getMessage());
         }
     }
 
