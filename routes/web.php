@@ -143,7 +143,7 @@ Route::get('/auth/google-callback', [SocialController::class, 'callbackGoogle'])
 
 Route::get('auth/facebook', [SocialController::class, 'redirectFacebook']);
 // Route to handle the callback from Facebook after authentication
-Route::get('auth/facebook-callback', [SocialController::class, 'callbackFacebook']);
+Route::get('/facebook/callback', [SocialController::class, 'callbackFacebook']);
 
 Route::get('/api//bookmarks', [BookmarkController::class, 'index']); // Fetch user's bookmarks
 Route::post('/api//bookmarks', [BookmarkController::class, 'store']); // Add bookmark

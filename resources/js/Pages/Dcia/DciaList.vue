@@ -242,6 +242,18 @@ export default {
             }
         };
 
+
+
+        const handleFacebookAuth = async () => {
+            loadingFacebook.value = true;
+            try {
+                window.location.href = `/auth/facebook?event=${currentEvent.value}`;
+            } catch (error) {
+                console.error(error);
+            } finally {
+                loadingFacebook.value = false;
+            }
+        };
         return {
             isAlreadyRegisteredModalOpen,
             registeredEvent,
@@ -250,7 +262,9 @@ export default {
             openRegisterModal,
             closeRegisterModal,
             handleGoogleAuth,
+            handleFacebookAuth,
             loadingGoogle,
+            loadingFacebook,
             webinars
         };
     }

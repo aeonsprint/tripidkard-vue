@@ -223,7 +223,7 @@ import TopBar from '@/Components/Organisms/TopBar.vue';
 import Footer from '@/Components/Organisms/Footer.vue';
 import { ref, onMounted } from "vue";
 import axios from "axios";
-import { useAuthStore } from "@/stores/auth";
+import { useAuthStore } from "@/Stores/auth";
 import Swal from "sweetalert2";
 import FileUpload from "@/Components/Molecules/FileUpload.vue";
 

@@ -10,19 +10,19 @@ use Laravel\Socialite\Facades\Socialite;
 
 class SocialController extends Controller
 {
-
     public function redirectGoogle(Request $request)
     {
-        $event = $request->query('event', 'dcia1'); // Default event
-        session(['event' => $event]); // Store event in session
+        $event = $request->query('event', null); // Kunin ang event, default ay null
+        session(['event' => $event]); // I-save sa session
 
         return Socialite::driver('google')->redirect();
     }
+
     public function callbackGoogle(Request $request)
     {
         try {
             $google_user = Socialite::driver('google')->user();
-            $event = session('event', 'dcia1'); // Get event from session
+            $event = session('event'); // Kunin ang event mula sa session
 
             $user = User::where('google_id', $google_user->getId())->first();
 
@@ -52,71 +52,66 @@ class SocialController extends Controller
 
             Auth::login($user);
 
-            return redirect("/dcia?already_registered=$event");
+            // Redirect based on event
+            return $event && in_array($event, ['dcia1', 'dcia2']) 
+                ? redirect("/dcia?already_registered=$event") 
+                : redirect("/login");
 
         } catch (\Throwable $th) {
-            return redirect('/dcia')->with('error', 'Something went wrong: ' . $th->getMessage());
+            return redirect("/");
         }
     }
 
-
-    public function redirectFacebook()
+    public function redirectFacebook(Request $request)
     {
-               // Redirect to Facebook for authentication
-        return response()->json(['redirect_url' => Socialite::driver('facebook')->redirect()->getTargetUrl()]);
+        $event = $request->query('event', null); // Default to null
+        session(['event' => $event]); // Save event in session
 
+        return Socialite::driver('facebook')->redirect();
     }
 
-    public function loginWithFacebook()
+    public function callbackFacebook()
     {
         try {
             $facebook_user = Socialite::driver('facebook')->user();
+            $event = session('event'); // Get event from session
 
-            // Find the user by google_id
-            $user = User::where('google_id', $facebook_user->getId())->first();
+            // Find user by facebook_id
+            $user = User::where('facebook_id', $facebook_user->getId())->first();
 
             if (!$user) {
-                // If user not found by google_id, try to find by email
+                // Try to find by email if facebook_id is not found
                 $user = User::where('email', $facebook_user->getEmail())->first();
 
                 if (!$user) {
-                    // Extract first and last name from Google full name
+                    // Extract first and last name from full name
                     $fullName = explode(' ', $facebook_user->getName(), 2);
-                    $firstName = $fullName[0] ?? ''; // First name
-                    $lastName = $fullName[1] ?? ''; // Last name (empty if only one name)
+                    $firstName = $fullName[0] ?? 'Unknown';
+                    $lastName = $fullName[1] ?? 'User';
 
-                    // If last name is required but empty, set a default value
-                    if (empty($lastName)) {
-                        $lastName = 'Unknown';
-                    }
-
-                    // Create a new user
                     $user = User::create([
                         'fname' => $firstName,
-                        'lname' => $lastName,  // ✅ Add this field
+                        'lname' => $lastName,
                         'email' => $facebook_user->getEmail(),
-                        'google_id' => $facebook_user->getId(),
+                        'facebook_id' => $facebook_user->getId(),
                         'role' => 'Customer',
                         'status' => 1,
                     ]);
-                    return redirect('/dcia?already_registered=true');
-
                 } else {
-                    // If user found by email but not by google_id, update the user
-                    $user->update([
-                        'facebook_id' => $facebook_user->getId(),
-                    ]);
+                    // Update user if found but missing facebook_id
+                    $user->update(['facebook_id' => $facebook_user->getId()]);
                 }
             }
 
             Auth::login($user);
-        return redirect('/dcia?already_registered=true');
 
+            // Redirect based on event
+            return $event && in_array($event, ['dcia1', 'dcia2']) 
+                ? redirect("/dcia?already_registered=$event") 
+                : redirect("/login");
 
         } catch (\Throwable $th) {
-            dd('Something went wrong: ' . $th->getMessage());
+            return redirect("/");
         }
-
     }
-
 }

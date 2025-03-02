@@ -26,7 +26,7 @@ import Header from '@/Layout/Dashboard/header.vue';
 import Sidebar from '@/Layout/Dashboard/sidebar.vue';
 import Table from '@/Layout/table.vue';
 import axios from 'axios';
-import { useAuthStore } from "@/stores/auth";
+import { useAuthStore } from "@/Stores/auth";
 
 export default {
     components: {

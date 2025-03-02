@@ -21,7 +21,7 @@
   </template>
 
   <script>
-  import QuickLinksSection from '@/Components/molecules/QuickLinksSection.vue';
+  import QuickLinksSection from '@/Components/Molecules/QuickLinksSection.vue';
   import BrandSection from '@/Components/Organisms/BrandSection.vue';
   import FooterBottom from '@/Components/Organisms/FooterBottom.vue';
 

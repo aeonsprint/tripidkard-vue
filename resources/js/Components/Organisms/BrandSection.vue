@@ -106,7 +106,7 @@
 </template>
 
 <script>
-import SocialIcon from '@/components/atoms/SocialIcon.vue';
+import SocialIcon from '@/Components/Atoms/SocialIcon.vue';
 import FacebookIcon from '@/Components/Atoms/svg/facebook.vue';
 import TwitterIcon from '@/Components/Atoms/svg/twitter.vue';
 import YouTubeIcon from '@/Components/Atoms/svg/youtube.vue';
