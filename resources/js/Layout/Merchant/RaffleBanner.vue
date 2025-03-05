@@ -31,7 +31,6 @@
                     <i class="fa-solid fa-share"></i>
                 </button>
 
-
                 <!-- Share Popup -->
                 <div v-if="showSharePopup" class="absolute right-0 mt-2 bg-white shadow-md rounded-md p-3 w-64">
                     <p class="text-sm text-gray-600">Share this link:</p>
@@ -65,7 +64,7 @@
         </div>
 
         <!-- Image Section -->
-        <div class="overflow-hidden pb-3 ">
+        <div class="overflow-hidden pb-3">
             <div class="flex justify-center items-center w-full h-full">
                 <img :src="currentImage" alt="Merchant Banner" class="image-slider" />
             </div>
@@ -108,17 +107,21 @@ const merchantInfo = computed(() => ({
         ? `${merchant.value.street || 'No street'},
            ${merchant.value.city || 'No city'},
            ${merchant.value.province || 'No province'},
-           ${merchant.value.zip || 'No zip'}`
+           ${merchant.value.zip || 'No zip'}`.trim()
         : "No address provided",
     "Email": merchant.value.user?.email || "No email provided",
     "Phone": merchant.value.user?.contact || "No phone number provided"
 }));
 
-// Computed property for images
+// Computed property for images (handling photos dynamically)
 const images = computed(() => {
-    return merchant.value.banner_images?.length
-        ? merchant.value.banner_images.map(img => `/storage/banner/${img}`)
-        : defaultImages;
+    const photos = [
+        merchant.value.photo1 ? `/storage/${merchant.value.photo1}` : null,
+        merchant.value.photo2 ? `/storage/${merchant.value.photo2}` : null,
+        merchant.value.photo3 ? `/storage/${merchant.value.photo3}` : null
+    ].filter(img => img !== null); // Remove null values
+
+    return photos.length ? photos : defaultImages;
 });
 
 // Current image based on currentIndex

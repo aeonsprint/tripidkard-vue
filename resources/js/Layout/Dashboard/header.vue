@@ -97,6 +97,7 @@
 </template>
 
 <script>
+import {  onMounted } from 'vue';
 import { useAuthStore } from '@/Stores/auth';
 import Swal from 'sweetalert2';
 import { useRoute } from "vue-router";
@@ -125,6 +126,9 @@ export default {
             });
         };
 
+        onMounted(() => {
+            authStore.getUser();
+        });
 
         return {
             handleLogout,

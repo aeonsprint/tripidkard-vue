@@ -114,15 +114,17 @@ export const useAuthStore = defineStore("auth", {
         },
 
         async logout() {
-            await this.getToken();
+            await this.getToken(); // Ensure CSRF token is fetched
             try {
-                await axios.post("/logout");
+                await axios.post("/logout", {}, { withCredentials: true }); // Send session cookies
                 this.authUser = null;
                 localStorage.removeItem("authUser");
             } catch (error) {
-                console.error("Error logging out:", error);
+                console.error("Error logging out:", error.response?.data || error.message);
             }
         },
+
+
 
 
         async handleForgotPassword(email) {
