@@ -1,4 +1,10 @@
 *
 !private/
 !public/
+!public/banner/
+!public/banner/*
+!public/img/
+!public/img/*
+!public/photos/
+!public/photos/*
 !.gitignore
