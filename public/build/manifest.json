@@ -48,17 +48,17 @@
     "src": "node_modules/material-design-icons-iconfont/dist/fonts/MaterialIcons-Regular.woff2"
   },
   "resources/css/app.css": {
-    "file": "assets/app-Bt-LJWjN.css",
+    "file": "assets/app-Dt2EYRvZ.css",
     "src": "resources/css/app.css",
     "isEntry": true
   },
   "resources/js/app.js": {
-    "file": "assets/app-CYOBgmuo.js",
+    "file": "assets/app-y1yr-4EP.js",
     "name": "app",
     "src": "resources/js/app.js",
     "isEntry": true,
     "css": [
-      "assets/app-CYmJO5_g.css"
+      "assets/app-BWpjuS8A.css"
     ],
     "assets": [
       "assets/MaterialIcons-Regular-BjXOXp5c.eot",
