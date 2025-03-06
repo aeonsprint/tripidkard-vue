@@ -1,0 +1,5 @@
+*
+!.gitignore
+!public/banner/
+!public/img/
+!public/photos/
