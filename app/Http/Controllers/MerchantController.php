@@ -33,6 +33,7 @@ class MerchantController extends Controller
             'users.lname',
             'users.contact',
             'users.email',
+            'users.avatar',
             'merchants.city',
             'merchants.province',
         ];
@@ -48,6 +49,7 @@ class MerchantController extends Controller
             'merchants.created_at',
             'users.id AS user_id',
             'users.email',
+            'users.avatar',
             'users.contact',
             'merchants.city',
             'merchants.province',

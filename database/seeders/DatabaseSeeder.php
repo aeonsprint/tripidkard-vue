@@ -22,6 +22,7 @@ class DatabaseSeeder extends Seeder
             // CustomerSeeder::class,
             LocationSeeder::class,
             InfluencerSeeder::class,
+            ImageBackgroundSeeder::class,
         ]);
     }
 }

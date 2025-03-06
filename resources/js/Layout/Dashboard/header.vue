@@ -97,14 +97,15 @@
 </template>
 
 <script>
-import {  onMounted } from 'vue';
+import { onMounted } from 'vue';
 import { useAuthStore } from '@/Stores/auth';
+import { useRouter } from "vue-router";
 import Swal from 'sweetalert2';
-import { useRoute } from "vue-router";
 
 export default {
     setup() {
         const authStore = useAuthStore();
+        const router = useRouter(); // Import router
 
         const handleLogout = async () => {
             Swal.fire({

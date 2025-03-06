@@ -336,8 +336,9 @@ const routesMerchant = [
         path: "/merchant/profile/",
         name: "merchant.profile",
         component: MerchantProfile,
-        meta: { title: "Merchant Profile", breadcrumb: "merchant/profile" },
+        meta: { title: "Merchant Profile", breadcrumb: "merchant/profile",
         requiresMerchantAuth: true,
+         },
     },
     {
         path: "/merchant/discount-list/",
